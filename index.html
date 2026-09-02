@@ -1,3 +1,4 @@
+````html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -696,7 +697,6 @@ textarea{
 
   <div class="layout">
 
-
     <div class="sidebar">
 
       <div class="user-card">
@@ -774,8 +774,6 @@ textarea{
     <div class="main-content">
 
 
-      <!-- DASHBOARD -->
-
       <div id="dashboard" class="page active">
 
         <div class="page-title">
@@ -832,7 +830,6 @@ textarea{
 
         <div class="dashboard-grid">
 
-
           <div class="panel">
 
             <div class="panel-title">
@@ -883,7 +880,6 @@ textarea{
 
           </div>
 
-
         </div>
 
 
@@ -907,8 +903,6 @@ textarea{
 
       </div>
 
-
-      <!-- AI -->
 
       <div id="ai" class="page">
 
@@ -980,8 +974,6 @@ You can type to me or use the microphone.
       </div>
 
 
-      <!-- TASKS -->
-
       <div id="tasks" class="page">
 
         <div class="page-title">
@@ -1013,8 +1005,6 @@ You can type to me or use the microphone.
 
       </div>
 
-
-      <!-- NOTES -->
 
       <div id="notes" class="page">
 
@@ -1072,8 +1062,6 @@ You can type to me or use the microphone.
       </div>
 
 
-      <!-- GOALS -->
-
       <div id="goals" class="page">
 
         <div class="page-title">
@@ -1105,8 +1093,6 @@ You can type to me or use the microphone.
 
       </div>
 
-
-      <!-- ANALYTICS -->
 
       <div id="analytics" class="page">
 
@@ -1146,6 +1132,7 @@ You can type to me or use the microphone.
 
           </div>
 
+
           <div class="stat-card">
 
             <small>NOTES STORED</small>
@@ -1157,6 +1144,7 @@ You can type to me or use the microphone.
             </div>
 
           </div>
+
 
           <div class="stat-card">
 
@@ -1172,7 +1160,7 @@ You can type to me or use the microphone.
 
         </div>
 
-        
+
         <div class="panel">
 
           <div class="panel-title">
@@ -1192,8 +1180,6 @@ You can type to me or use the microphone.
       </div>
 
 
-      <!-- LOGS -->
-
       <div id="logs" class="page">
 
         <div class="page-title">
@@ -1211,8 +1197,6 @@ You can type to me or use the microphone.
 
       </div>
 
-
-      <!-- SETTINGS -->
 
       <div id="settings" class="page">
 
@@ -1286,7 +1270,7 @@ You can type to me or use the microphone.
 
         </div>
 
-        
+
         <div
           class="panel"
           style="margin-top:16px">
@@ -1333,4 +1317,2255 @@ let nexusData = {
 
 };
 
-... (truncated for brevity in tool input) ...
+
+function normalizeData(){
+
+  if(!Array.isArray(nexusData.tasks))
+    nexusData.tasks=[];
+
+  if(!Array.isArray(nexusData.notes))
+    nexusData.notes=[];
+
+  if(!Array.isArray(nexusData.goals))
+    nexusData.goals=[];
+
+  if(!Array.isArray(nexusData.logs))
+    nexusData.logs=[];
+
+}
+
+
+function loadData(){
+
+  const current =
+    localStorage.getItem(STORAGE_KEY);
+
+  const old =
+    localStorage.getItem("nexusData");
+
+  const saved =
+    current || old;
+
+
+  if(saved){
+
+    try{
+
+      nexusData =
+        JSON.parse(saved);
+
+      normalizeData();
+
+      document.getElementById(
+        "signupSection"
+      ).style.display="none";
+
+      document.getElementById(
+        "loginSection"
+      ).style.display="block";
+
+    }catch(e){
+
+      console.error(e);
+
+    }
+
+  }
+
+}
+
+
+function saveData(){
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(nexusData)
+  );
+
+}
+
+
+function createAccount(){
+
+  const name =
+    document.getElementById(
+      "signupName"
+    ).value.trim();
+
+  const password =
+    document.getElementById(
+      "signupPassword"
+    ).value;
+
+  const message =
+    document.getElementById(
+      "authMessage"
+    );
+
+
+  if(!name || !password){
+
+    message.innerText =
+      "ENTER A NAME AND PASSWORD, COMMANDER.";
+
+    return;
+
+  }
+
+
+  nexusData.name =
+    name;
+
+  nexusData.password =
+    password;
+
+
+  addLog(
+    "NEXUS ACCOUNT INITIALIZED FOR " +
+    name.toUpperCase()
+  );
+
+
+  saveData();
+
+  openApp();
+
+}
+
+
+function login(){
+
+  const password =
+    document.getElementById(
+      "loginPassword"
+    ).value;
+
+  const message =
+    document.getElementById(
+      "authMessage"
+    );
+
+
+  if(password === nexusData.password){
+
+    document.getElementById(
+      "loginPassword"
+    ).value="";
+
+    openApp();
+
+  }else{
+
+    message.innerText =
+      "ACCESS DENIED. INVALID PASSWORD.";
+
+  }
+
+}
+
+
+function openApp(){
+
+  document.getElementById(
+    "authScreen"
+  ).style.display="none";
+
+  document.getElementById(
+    "app"
+  ).style.display="block";
+
+
+  document.getElementById(
+    "sidebarName"
+  ).innerText =
+    nexusData.name.toUpperCase() +
+    " // COMMANDER";
+
+
+  document.getElementById(
+    "settingsName"
+  ).value =
+    nexusData.name;
+
+
+  addLog(
+    "COMMANDER ACCESS GRANTED."
+  );
+
+
+  updateAll();
+
+}
+
+
+function showPage(pageId,button){
+
+  document.querySelectorAll(
+    ".page"
+  ).forEach(page =>
+    page.classList.remove("active")
+  );
+
+
+  const page =
+    document.getElementById(pageId);
+
+
+  if(page)
+    page.classList.add("active");
+
+
+  document.querySelectorAll(
+    ".nav-btn"
+  ).forEach(btn => {
+
+    btn.classList.toggle(
+      "active",
+      btn.dataset.page === pageId
+    );
+
+  });
+
+
+  if(button &&
+     button.classList.contains("nav-btn")){
+
+    button.classList.add("active");
+
+  }
+
+}
+
+
+/* =========================
+   TASK SYSTEM
+========================= */
+
+
+function addTask(){
+
+  const input =
+    document.getElementById(
+      "taskInput"
+    );
+
+  const text =
+    input.value.trim();
+
+
+  if(!text)
+    return;
+
+
+  nexusData.tasks.push({
+
+    id:Date.now()+Math.random(),
+
+    text:text,
+
+    completed:false
+
+  });
+
+
+  input.value="";
+
+
+  addLog(
+    "NEW TASK CREATED: " +
+    text
+  );
+
+
+  updateAll();
+
+}
+
+
+function toggleTask(id){
+
+  const task =
+    nexusData.tasks.find(
+      t => String(t.id) === String(id)
+    );
+
+
+  if(!task)
+    return;
+
+
+  task.completed =
+    !task.completed;
+
+
+  addLog(
+
+    task.completed
+      ? "TASK COMPLETED: " + task.text
+      : "TASK REOPENED: " + task.text
+
+  );
+
+
+  updateAll();
+
+}
+
+
+function deleteTask(id){
+
+  nexusData.tasks =
+    nexusData.tasks.filter(
+      t => String(t.id) !== String(id)
+    );
+
+
+  addLog(
+    "TASK REMOVED."
+  );
+
+
+  updateAll();
+
+}
+
+
+function renderTasks(){
+
+  const list =
+    document.getElementById(
+      "taskList"
+    );
+
+
+  list.innerHTML="";
+
+
+  if(nexusData.tasks.length===0){
+
+    list.innerHTML =
+      "<div class='panel' style='color:#7e9b89;font-size:11px'>NO TASKS DETECTED.</div>";
+
+    return;
+
+  }
+
+
+  nexusData.tasks
+    .slice()
+    .reverse()
+    .forEach(task => {
+
+
+      const item =
+        document.createElement("div");
+
+      item.className =
+        "list-item";
+
+
+      const left =
+        document.createElement("div");
+
+      left.className =
+        "list-left";
+
+
+      const check =
+        document.createElement("input");
+
+      check.type =
+        "checkbox";
+
+      check.checked =
+        !!task.completed;
+
+
+      check.addEventListener(
+        "change",
+        () => toggleTask(task.id)
+      );
+
+
+      const span =
+        document.createElement("span");
+
+      span.textContent =
+        task.text;
+
+
+      if(task.completed)
+        span.className =
+          "completed";
+
+
+      const del =
+        document.createElement("button");
+
+      del.className =
+        "action-btn";
+
+      del.textContent =
+        "DELETE";
+
+
+      del.addEventListener(
+        "click",
+        () => deleteTask(task.id)
+      );
+
+
+      left.appendChild(check);
+
+      left.appendChild(span);
+
+      item.appendChild(left);
+
+      item.appendChild(del);
+
+      list.appendChild(item);
+
+    });
+
+}
+
+
+/* =========================
+   NOTES
+========================= */
+
+
+function addNote(){
+
+  const title =
+    document.getElementById(
+      "noteTitle"
+    ).value.trim();
+
+
+  const content =
+    document.getElementById(
+      "noteContent"
+    ).value.trim();
+
+
+  if(!title || !content)
+    return;
+
+
+  nexusData.notes.push({
+
+    id:Date.now()+Math.random(),
+
+    title:title,
+
+    content:content
+
+  });
+
+
+  document.getElementById(
+    "noteTitle"
+  ).value="";
+
+
+  document.getElementById(
+    "noteContent"
+  ).value="";
+
+
+  addLog(
+    "NOTE SAVED: " +
+    title
+  );
+
+
+  updateAll();
+
+}
+
+
+function deleteNote(id){
+
+  nexusData.notes =
+    nexusData.notes.filter(
+      n => String(n.id) !== String(id)
+    );
+
+
+  addLog(
+    "NOTE DELETED."
+  );
+
+
+  updateAll();
+
+}
+
+
+function renderNotes(){
+
+  const list =
+    document.getElementById(
+      "notesList"
+    );
+
+
+  list.innerHTML="";
+
+
+  if(nexusData.notes.length===0){
+
+    list.innerHTML =
+      "<div class='panel' style='color:#7e9b89;font-size:11px'>NO NOTES STORED YET.</div>";
+
+    return;
+
+  }
+
+
+  nexusData.notes
+    .slice()
+    .reverse()
+    .forEach(note => {
+
+
+      const card =
+        document.createElement("div");
+
+      card.className =
+        "note-card";
+
+
+      const title =
+        document.createElement("h3");
+
+      title.textContent =
+        note.title;
+
+
+      const content =
+        document.createElement("p");
+
+      content.textContent =
+        note.content;
+
+
+      const br =
+        document.createElement("br");
+
+
+      const del =
+        document.createElement("button");
+
+      del.className =
+        "action-btn";
+
+      del.textContent =
+        "DELETE";
+
+
+      del.addEventListener(
+        "click",
+        () => deleteNote(note.id)
+      );
+
+
+      card.appendChild(title);
+
+      card.appendChild(content);
+
+      card.appendChild(br);
+
+      card.appendChild(del);
+
+
+      list.appendChild(card);
+
+    });
+
+}
+
+
+/* =========================
+   GOALS
+========================= */
+
+
+function addGoal(){
+
+  const input =
+    document.getElementById(
+      "goalInput"
+    );
+
+
+  const text =
+    input.value.trim();
+
+
+  if(!text)
+    return;
+
+
+  nexusData.goals.push({
+
+    id:Date.now()+Math.random(),
+
+    text:text,
+
+    progress:0
+
+  });
+
+
+  input.value="";
+
+
+  addLog(
+    "NEW GOAL CREATED: " +
+    text
+  );
+
+
+  updateAll();
+
+}
+
+
+function changeGoalProgress(id,amount){
+
+  const goal =
+    nexusData.goals.find(
+      g => String(g.id) === String(id)
+    );
+
+
+  if(!goal)
+    return;
+
+
+  goal.progress =
+    Math.max(
+      0,
+      Math.min(
+        100,
+        Number(goal.progress || 0) +
+        amount
+      )
+    );
+
+
+  addLog(
+    "GOAL PROGRESS UPDATED: " +
+    goal.text +
+    " // " +
+    goal.progress +
+    "%"
+  );
+
+
+  updateAll();
+
+}
+
+
+function deleteGoal(id){
+
+  nexusData.goals =
+    nexusData.goals.filter(
+      g => String(g.id) !== String(id)
+    );
+
+
+  addLog(
+    "GOAL REMOVED."
+  );
+
+
+  updateAll();
+
+}
+
+
+function renderGoals(){
+
+  const list =
+    document.getElementById(
+      "goalList"
+    );
+
+
+  list.innerHTML="";
+
+
+  if(nexusData.goals.length===0){
+
+    list.innerHTML =
+      "<div class='panel' style='color:#7e9b89;font-size:11px'>NO GOALS DETECTED.</div>";
+
+    return;
+
+  }
+
+
+  nexusData.goals
+    .slice()
+    .reverse()
+    .forEach(goal => {
+
+
+      const item =
+        document.createElement("div");
+
+      item.className =
+        "panel";
+
+      item.style.marginBottom =
+        "11px";
+
+
+      const title =
+        document.createElement("div");
+
+      title.textContent =
+        goal.text;
+
+
+      const progress =
+        document.createElement("div");
+
+      progress.className =
+        "goal-progress";
+
+
+      const fill =
+        document.createElement("div");
+
+
+      fill.style.width =
+        Math.max(
+          0,
+          Math.min(
+            100,
+            Number(goal.progress || 0)
+          )
+        ) + "%";
+
+
+      progress.appendChild(fill);
+
+
+      const percent =
+        document.createElement("div");
+
+
+      percent.style.cssText =
+        "color:#00ff88;font-size:11px;margin-top:8px";
+
+
+      percent.textContent =
+        goal.progress + "%";
+
+
+      const controls =
+        document.createElement("div");
+
+      controls.className =
+        "goal-controls";
+
+      controls.style.marginTop =
+        "11px";
+
+
+      const minus =
+        document.createElement("button");
+
+      minus.className =
+        "action-btn";
+
+      minus.textContent =
+        "-10%";
+
+
+      minus.addEventListener(
+        "click",
+        () =>
+          changeGoalProgress(
+            goal.id,
+            -10
+          )
+      );
+
+
+      const plus =
+        document.createElement("button");
+
+      plus.className =
+        "action-btn";
+
+      plus.textContent =
+        "+10%";
+
+
+      plus.addEventListener(
+        "click",
+        () =>
+          changeGoalProgress(
+            goal.id,
+            10
+          )
+      );
+
+
+      const del =
+        document.createElement("button");
+
+      del.className =
+        "action-btn";
+
+      del.textContent =
+        "DELETE";
+
+
+      del.addEventListener(
+        "click",
+        () =>
+          deleteGoal(goal.id)
+      );
+
+
+      controls.append(
+        minus,
+        plus,
+        del
+      );
+
+
+      item.append(
+        title,
+        progress,
+        percent,
+        controls
+      );
+
+
+      list.appendChild(item);
+
+    });
+
+}
+
+
+/* =========================
+   REAL AI CHAT
+========================= */
+
+
+async function sendAI(){
+
+  const input =
+    document.getElementById(
+      "aiInput"
+    );
+
+
+  const text =
+    input.value.trim();
+
+
+  if(!text)
+    return;
+
+
+  addChatMessage(
+    "COMMANDER: " + text,
+    "user"
+  );
+
+
+  input.value="";
+
+
+  if(text.startsWith("/")){
+
+    handleCommand(
+      text.trim().toLowerCase()
+    );
+
+    return;
+
+  }
+
+
+  const thinking =
+    document.createElement("div");
+
+
+  thinking.className =
+    "message nexus";
+
+
+  thinking.textContent =
+    "NEXUS: Processing...";
+
+
+  thinking.id =
+    "nexusThinking";
+
+
+  const chat =
+    document.getElementById(
+      "chatBox"
+    );
+
+
+  chat.appendChild(
+    thinking
+  );
+
+
+  chat.scrollTop =
+    chat.scrollHeight;
+
+
+  try{
+
+    const response =
+      await fetch(
+        "/api/chat",
+        {
+
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:JSON.stringify({
+            message:text
+          })
+
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    const thinkingMessage =
+      document.getElementById(
+        "nexusThinking"
+      );
+
+
+    if(thinkingMessage)
+      thinkingMessage.remove();
+
+
+    if(!response.ok){
+
+      throw new Error(
+        data.error ||
+        "AI request failed."
+      );
+
+    }
+
+
+    if(data.reply){
+
+      addChatMessage(
+        "NEXUS: " + data.reply,
+        "nexus"
+      );
+
+
+      speakNexus(
+        data.reply
+      );
+
+    }else{
+
+      addChatMessage(
+        "NEXUS: AI core returned no response.",
+        "nexus"
+      );
+
+    }
+
+
+  }catch(error){
+
+    const thinkingMessage =
+      document.getElementById(
+        "nexusThinking"
+      );
+
+
+    if(thinkingMessage)
+      thinkingMessage.remove();
+
+
+    console.error(
+      "NEXUS CONNECTION ERROR:",
+      error
+    );
+
+
+    addChatMessage(
+      "NEXUS: Connection to AI core failed. Check the server terminal.",
+      "nexus"
+    );
+
+  }
+
+}
+
+
+/* =========================
+   VOICE INPUT
+========================= */
+
+
+let recognition = null;
+let isListening = false;
+
+
+function startVoiceInput(){
+
+  const voiceStatus =
+    document.getElementById(
+      "voiceStatus"
+    );
+
+  const voiceButton =
+    document.getElementById(
+      "voiceButton"
+    );
+
+
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+
+  if(!SpeechRecognition){
+
+    voiceStatus.innerText =
+      "VOICE INPUT IS NOT SUPPORTED BY THIS BROWSER.";
+
+    return;
+
+  }
+
+
+  if(isListening){
+
+    if(recognition)
+      recognition.stop();
+
+    return;
+
+  }
+
+
+  recognition =
+    new SpeechRecognition();
+
+
+  recognition.lang =
+    "en-US";
+
+
+  recognition.continuous =
+    false;
+
+
+  recognition.interimResults =
+    false;
+
+
+  recognition.onstart =
+    function(){
+
+      isListening =
+        true;
+
+      voiceButton.classList.add(
+        "listening"
+      );
+
+      voiceButton.innerText =
+        "🛑 STOP";
+
+      voiceStatus.innerText =
+        "LISTENING... SPEAK NOW, COMMANDER.";
+
+    };
+
+
+  recognition.onresult =
+    function(event){
+
+      const transcript =
+        event.results[0][0].transcript;
+
+
+      document.getElementById(
+        "aiInput"
+      ).value =
+        transcript;
+
+
+      voiceStatus.innerText =
+        "VOICE CAPTURED. EXECUTING...";
+
+
+      setTimeout(
+        () => sendAI(),
+        300
+      );
+
+    };
+
+
+  recognition.onerror =
+    function(event){
+
+      console.error(
+        "VOICE INPUT ERROR:",
+        event.error
+      );
+
+
+      voiceStatus.innerText =
+        "VOICE ERROR: " +
+        event.error;
+
+    };
+
+
+  recognition.onend =
+    function(){
+
+      isListening =
+        false;
+
+      voiceButton.classList.remove(
+        "listening"
+      );
+
+      voiceButton.innerText =
+        "🎙️ VOICE";
+
+    };
+
+
+  recognition.start();
+
+}
+
+
+/* =========================
+   VOICE OUTPUT
+========================= */
+
+
+let currentSpeech = null;
+
+
+function cleanTextForSpeech(text){
+
+  if(!text)
+    return "";
+
+
+  let clean =
+    String(text);
+
+
+  clean =
+    clean.replace(
+      /https?:\/\/\S+/gi,
+      ""
+    );
+
+
+  clean =
+    clean.replace(
+      /\[([^\]]+)\]\([^)]+\)/g,
+      "$1"
+    );
+
+
+  clean =
+    clean.replace(
+      /```[\s\S]*?```/g,
+      ""
+    );
+
+
+  clean =
+    clean.replace(
+      /`([^`]+)`/g,
+      "$1"
+    );
+
+
+  clean =
+    clean.replace(
+      /^\s*#{1,6}\s*/gm,
+      ""
+    );
+
+
+  clean =
+    clean.replace(
+      /[*_~]/g,
+      ""
+    );
+
+
+  clean =
+    clean.replace(
+      /^[\s]*[-•◦▪▫●○■□►▶️»]+\s*/gm,
+      ""
+    );
+
+
+  clean =
+    clean.replace(
+      /[\u{1F000}-\u{1FAFF}]/gu,
+      ""
+    );
+
+
+  clean =
+    clean.replace(
+      /[\u{2600}-\u{27BF}]/gu,
+      ""
+    );
+
+
+  clean =
+    clean.replace(
+      /[\u{2300}-\u{23FF}]/gu,
+      ""
+    );
+
+
+  clean =
+    clean.replace(
+      /[★☆✦✧✓✔✕✖→←↑↓↔️⇒⇐∞≈≠≤≥]/g,
+      ""
+    );
+
+
+  clean =
+    clean.replace(
+      /([!?.,])\1{2,}/g,
+      "$1"
+    );
+
+
+  clean =
+    clean.replace(
+      /\r?\n+/g,
+      ". "
+    );
+
+
+  clean =
+    clean.replace(
+      /\s+/g,
+      " "
+    );
+
+
+  return clean.trim();
+
+}
+
+
+function getBestEnglishVoice(){
+
+  const voices =
+    window.speechSynthesis.getVoices();
+
+
+  if(!voices.length)
+    return null;
+
+
+  const preferred =
+    voices.find(
+      voice =>
+        /^en-US$/i.test(voice.lang) &&
+        !/espeak|compact|novelty/i.test(voice.name)
+    );
+
+
+  if(preferred)
+    return preferred;
+
+
+  const english =
+    voices.find(
+      voice =>
+        /^en/i.test(voice.lang) &&
+        !/espeak|compact|novelty/i.test(voice.name)
+    );
+
+
+  return english || null;
+
+}
+
+
+function speakNexus(text){
+
+  if(!("speechSynthesis" in window)){
+
+    console.log(
+      "Speech synthesis is not supported."
+    );
+
+    return;
+
+  }
+
+
+  const cleanText =
+    cleanTextForSpeech(text);
+
+
+  if(!cleanText)
+    return;
+
+
+  window.speechSynthesis.cancel();
+
+
+  const voiceButton =
+    document.getElementById(
+      "voiceButton"
+    );
+
+  const voiceStatus =
+    document.getElementById(
+      "voiceStatus"
+    );
+
+
+  const speech =
+    new SpeechSynthesisUtterance(
+      cleanText
+    );
+
+
+  speech.rate =
+    0.92;
+
+
+  speech.pitch =
+    1;
+
+
+  speech.volume =
+    1;
+
+
+  const voice =
+    getBestEnglishVoice();
+
+
+  if(voice)
+    speech.voice =
+      voice;
+
+
+  currentSpeech =
+    speech;
+
+
+  speech.onstart =
+    function(){
+
+      if(voiceButton)
+        voiceButton.classList.add(
+          "speaking"
+        );
+
+      if(voiceStatus)
+        voiceStatus.innerText =
+          "NEXUS SPEAKING...";
+
+    };
+
+
+  speech.onend =
+    function(){
+
+      if(voiceButton)
+        voiceButton.classList.remove(
+          "speaking"
+        );
+
+      if(voiceStatus)
+        voiceStatus.innerText =
+          "Voice system ready.";
+
+      currentSpeech =
+        null;
+
+    };
+
+
+  speech.onerror =
+    function(event){
+
+      console.error(
+        "NEXUS SPEECH ERROR:",
+        event
+      );
+
+
+      if(voiceButton)
+        voiceButton.classList.remove(
+          "speaking"
+        );
+
+      if(voiceStatus)
+        voiceStatus.innerText =
+          "Voice output error.";
+
+      currentSpeech =
+        null;
+
+    };
+
+
+  window.speechSynthesis.speak(
+    speech
+  );
+
+}
+
+
+if("speechSynthesis" in window){
+
+  window.speechSynthesis.onvoiceschanged =
+    function(){
+
+      getBestEnglishVoice();
+
+    };
+
+}
+
+
+/* =========================
+   COMMAND SYSTEM
+========================= */
+
+
+function handleCommand(command){
+
+  const parts =
+    command.split(/\s+/);
+
+
+  const cmd =
+    parts[0];
+
+
+  let response="";
+
+
+  switch(cmd){
+
+    case "/help":
+
+      response =
+`AVAILABLE COMMANDS
+
+/help     - display command list
+/tasks    - view task status
+/notes    - view note count
+/goals    - view goals
+/status   - system status
+/time     - current system time
+/clear    - clear terminal display
+
+NORMAL MESSAGES ARE ALSO ACCEPTED, COMMANDER.`;
+
+      break;
+
+
+    case "/tasks":
+
+      response =
+        getTasksCommand();
+
+      break;
+
+
+    case "/notes":
+
+      response =
+        nexusData.notes.length === 0
+          ? "NOTES DATABASE EMPTY."
+          : "NOTES STORED: " +
+            nexusData.notes.length +
+            ".";
+
+      break;
+
+
+    case "/goals":
+
+      response =
+        getGoalsCommand();
+
+      break;
+
+
+    case "/status":
+
+      response =
+`NEXUS STATUS REPORT
+
+CORE: ONLINE
+DATABASE: LOCAL STORAGE
+OPERATOR: ${nexusData.name.toUpperCase()}
+TASKS: ${nexusData.tasks.length}
+NOTES: ${nexusData.notes.length}
+GOALS: ${nexusData.goals.length}
+SECURITY: LOCAL ACCESS
+VOICE INPUT: AVAILABLE
+VOICE OUTPUT: AVAILABLE`;
+
+      break;
+
+
+    case "/time":
+
+      response =
+        "CURRENT SYSTEM TIME: " +
+        new Date().toLocaleTimeString();
+
+      break;
+
+
+    case "/clear":
+
+      document.getElementById(
+        "chatBox"
+      ).innerHTML="";
+
+
+      addChatMessage(
+        "NEXUS: TERMINAL CLEARED. READY FOR NEW COMMANDS, COMMANDER.",
+        "nexus"
+      );
+
+
+      addLog(
+        "TERMINAL DISPLAY CLEARED."
+      );
+
+
+      saveData();
+
+
+      return;
+
+
+    default:
+
+      response =
+        "UNKNOWN COMMAND: " +
+        cmd +
+        "\nTYPE /help FOR AVAILABLE COMMANDS.";
+
+  }
+
+
+  setTimeout(
+    () => {
+
+      addChatMessage(
+        "NEXUS: " + response,
+        "nexus"
+      );
+
+
+      if(cmd !== "/clear")
+        speakNexus(response);
+
+    },
+    180
+  );
+
+
+  addLog(
+    "COMMAND EXECUTED: " +
+    cmd.toUpperCase()
+  );
+
+
+  saveData();
+
+}
+
+
+/* =========================
+   AI INFORMATION COMMANDS
+========================= */
+
+
+function getTasksCommand(){
+
+  if(nexusData.tasks.length===0){
+
+    return "TASK DATABASE EMPTY.";
+
+  }
+
+
+  const active =
+    nexusData.tasks.filter(
+      t => !t.completed
+    );
+
+
+  const done =
+    nexusData.tasks.filter(
+      t => t.completed
+    );
+
+
+  let result =
+`TASK STATUS
+
+TOTAL: ${nexusData.tasks.length}
+ACTIVE: ${active.length}
+COMPLETED: ${done.length}`;
+
+
+  if(active.length){
+
+    result +=
+      "\n\nACTIVE TASKS:";
+
+
+    active
+      .slice(0,5)
+      .forEach(
+        (task,i) => {
+
+          result +=
+            `\n${i+1}. ${task.text}`;
+
+        }
+      );
+
+
+    if(active.length > 5){
+
+      result +=
+        `\n... AND ${active.length-5} MORE`;
+
+    }
+
+  }
+
+
+  return result;
+
+}
+
+
+function getGoalsCommand(){
+
+  if(nexusData.goals.length===0){
+
+    return "NO GOALS REGISTERED, COMMANDER.";
+
+  }
+
+
+  let result =
+    "REGISTERED GOALS:";
+
+
+  nexusData.goals
+    .slice(0,6)
+    .forEach(
+      (goal,i) => {
+
+        result +=
+          `\n${i+1}. ${goal.text} // ${goal.progress}%`;
+
+      }
+    );
+
+
+  if(nexusData.goals.length > 6){
+
+    result +=
+      `\n... AND ${nexusData.goals.length-6} MORE`;
+
+  }
+
+
+  return result;
+
+}
+
+
+function addChatMessage(
+  text,
+  type
+){
+
+  const chat =
+    document.getElementById(
+      "chatBox"
+    );
+
+
+  const message =
+    document.createElement(
+      "div"
+    );
+
+
+  message.className =
+    "message " + type;
+
+
+  message.textContent =
+    text;
+
+
+  chat.appendChild(
+    message
+  );
+
+
+  chat.scrollTop =
+    chat.scrollHeight;
+
+}
+
+
+/* =========================
+   LOGGING
+========================= */
+
+
+function addLog(message){
+
+  const time =
+    new Date().toLocaleTimeString();
+
+
+  nexusData.logs.push(
+    `${time} // ${message}`
+  );
+
+
+  if(nexusData.logs.length > 100){
+
+    nexusData.logs.shift();
+
+  }
+
+}
+
+
+/* =========================
+   DASHBOARD
+========================= */
+
+
+function renderLogs(){
+
+  const box =
+    document.getElementById(
+      "logsBox"
+    );
+
+
+  if(nexusData.logs.length===0){
+
+    box.textContent =
+      "> NO SYSTEM ACTIVITY RECORDED.";
+
+    return;
+
+  }
+
+
+  box.innerHTML="";
+
+
+  nexusData.logs
+    .slice()
+    .reverse()
+    .forEach(log => {
+
+      const line =
+        document.createElement(
+          "div"
+        );
+
+
+      line.textContent =
+        "> " + log;
+
+
+      box.appendChild(
+        line
+      );
+
+    });
+
+}
+
+
+function updateDashboard(){
+
+  const total =
+    nexusData.tasks.length;
+
+
+  const completed =
+    nexusData.tasks.filter(
+      t => t.completed
+    ).length;
+
+
+  const active =
+    total - completed;
+
+
+  document.getElementById(
+    "totalTasks"
+  ).innerText =
+    total;
+
+
+  document.getElementById(
+    "completedTasks"
+  ).innerText =
+    completed;
+
+
+  document.getElementById(
+    "totalNotes"
+  ).innerText =
+    nexusData.notes.length;
+
+
+  document.getElementById(
+    "totalGoals"
+  ).innerText =
+    nexusData.goals.length;
+
+
+  document.getElementById(
+    "statusOperator"
+  ).innerText =
+    nexusData.name.toUpperCase();
+
+
+  document.getElementById(
+    "reminderMessage"
+  ).innerText =
+
+    active > 0
+
+      ? `Commander, you have ${active} active task${active===1?"":"s"}. Time to execute.`
+
+      : "No active tasks detected. Either you're incredibly productive or suspiciously free.";
+
+
+  const hour =
+    new Date().getHours();
+
+
+  let greeting =
+    "Good evening";
+
+
+  if(hour < 12)
+    greeting =
+      "Good morning";
+
+  else if(hour < 18)
+    greeting =
+      "Good afternoon";
+
+
+  document.getElementById(
+    "welcomeMessage"
+  ).innerText =
+    `${greeting}, ${nexusData.name}. NEXUS is online and ready.`;
+
+
+  const latest =
+    nexusData.logs
+      .slice(-5)
+      .reverse();
+
+
+  const latestBox =
+    document.getElementById(
+      "latestActivity"
+    );
+
+
+  if(latest.length===0){
+
+    latestBox.textContent =
+      "NEXUS awaiting activity...";
+
+  }else{
+
+    latestBox.innerHTML="";
+
+
+    latest.forEach(
+      log => {
+
+        const div =
+          document.createElement(
+            "div"
+          );
+
+
+        div.textContent =
+          "> " + log;
+
+
+        latestBox.appendChild(
+          div
+        );
+
+      }
+    );
+
+  }
+
+}
+
+
+/* =========================
+   ANALYTICS
+========================= */
+
+
+function updateAnalytics(){
+
+  const total =
+    nexusData.tasks.length;
+
+
+  const completed =
+    nexusData.tasks.filter(
+      t => t.completed
+    ).length;
+
+
+  const active =
+    total - completed;
+
+
+  const rate =
+    total === 0
+      ? 0
+      : Math.round(
+          (completed / total) * 100
+        );
+
+
+  let average=0;
+
+
+  if(nexusData.goals.length){
+
+    average =
+      Math.round(
+
+        nexusData.goals.reduce(
+          (sum,g) =>
+            sum +
+            Number(
+              g.progress || 0
+            ),
+          0
+        ) /
+        nexusData.goals.length
+
+      );
+
+  }
+
+
+  document.getElementById(
+    "completionRate"
+  ).innerText =
+    rate + "%";
+
+
+  document.getElementById(
+    "activeTasks"
+  ).innerText =
+    active;
+
+
+  document.getElementById(
+    "analyticsNotes"
+  ).innerText =
+    nexusData.notes.length;
+
+
+  document.getElementById(
+    "goalAverage"
+  ).innerText =
+    average + "%";
+
+
+  let analysis;
+
+
+  if(total===0){
+
+    analysis =
+      "NEXUS has insufficient mission data. Add tasks and goals to begin analysis.";
+
+  }else if(rate>=80){
+
+    analysis =
+      "Excellent execution rate, Commander. NEXUS is impressed. Try not to let it get to your head.";
+
+  }else if(rate>=50){
+
+    analysis =
+      "Moderate progress detected. You're moving, but NEXUS recommends increasing consistency.";
+
+  }else{
+
+    analysis =
+      "Low completion rate detected. No panic, Commander. Select one task and finish it.";
+
+  }
+
+
+  document.getElementById(
+    "analysisText"
+  ).innerText =
+    analysis;
+
+}
+
+
+/* =========================
+   SETTINGS
+========================= */
+
+
+function saveSettings(){
+
+  const name =
+    document.getElementById(
+      "settingsName"
+    ).value.trim();
+
+
+  if(!name)
+    return;
+
+
+  nexusData.name =
+    name;
+
+
+  document.getElementById(
+    "sidebarName"
+  ).innerText =
+    name.toUpperCase() +
+    " // COMMANDER";
+
+
+  addLog(
+    "OPERATOR NAME UPDATED TO " +
+    name.toUpperCase()
+  );
+
+
+  updateAll();
+
+}
+
+
+function exportData(){
+
+  const data =
+    JSON.stringify(
+      nexusData,
+      null,
+      2
+    );
+
+
+  const blob =
+    new Blob(
+      [data],
+      {
+        type:
+          "application/json"
+      }
+    );
+
+
+  const url =
+    URL.createObjectURL(
+      blob
+    );
+
+
+  const a =
+    document.createElement(
+      "a"
+    );
+
+
+  a.href =
+    url;
+
+
+  a.download =
+    "nexus-data.json";
+
+
+  document.body.appendChild(
+    a
+  );
+
+
+  a.click();
+
+
+  a.remove();
+
+
+  URL.revokeObjectURL(
+    url
+  );
+
+
+  addLog(
+    "NEXUS DATA EXPORTED."
+  );
+
+
+  saveData();
+
+}
+
+
+function clearAllData(){
+
+  const confirmation =
+    confirm(
+      "RESET NEXUS?\n\nALL LOCAL NEXUS DATA WILL BE DELETED."
+    );
+
+
+  if(!confirmation)
+    return;
+
+
+  localStorage.removeItem(
+    STORAGE_KEY
+  );
+
+
+  localStorage.removeItem(
+    "nexusData"
+  );
+
+
+  location.reload();
+
+}
+
+
+/* =========================
+   MASTER UPDATE SYSTEM
+========================= */
+
+function updateAll(){
+
+  normalizeData();
+
+  saveData();
+
+  updateDashboard();
+
+  updateAnalytics();
+
+  renderTasks();
+
+  renderNotes();
+
+  renderGoals();
+
+  renderLogs();
+
+}
+
+
+/* =========================
+   CLOCK
+========================= */
+
+function updateClock(){
+
+  const clock =
+    document.getElementById(
+      "clock"
+    );
+
+
+  if(clock)
+    clock.innerText =
+      new Date().toLocaleTimeString();
+
+}
+
+
+/* =========================
+   START NEXUS
+========================= */
+
+loadData();
+
+updateClock();
+
+setInterval(
+  updateClock,
+  1000
+);
+
+</script>
+
+</body>
+</html>
+````
