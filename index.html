@@ -1,21 +1,18 @@
-````html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>NEXUS // AI COMMAND CENTER</title>
 
 <style>
 :root{
   --green:#00ff88;
-  --green2:#00b85c;
   --bg:#020504;
   --panel:#07100b;
-  --panel2:#030806;
   --border:#123d27;
-  --text:#d8ffe9;
-  --muted:#7e9b89;
+  --text:#f5f7f6;
+  --muted:#b8c5be;
   --danger:#ff7070;
 }
 
@@ -44,6 +41,15 @@ button:active{
   transform:scale(.98);
 }
 
+button:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+}
+
+/* =========================
+   AUTH
+========================= */
+
 #authScreen{
   min-height:100vh;
   display:flex;
@@ -64,13 +70,36 @@ button:active{
   box-shadow:0 0 40px rgba(0,255,136,.12);
 }
 
+.auth-icon{
+  width:92px;
+  height:92px;
+  margin:0 auto 18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(0,255,136,.65);
+  border-radius:24px;
+  background:
+    radial-gradient(circle,rgba(0,255,136,.12),transparent 65%),
+    #020604;
+  box-shadow:
+    0 0 28px rgba(0,255,136,.16),
+    inset 0 0 20px rgba(0,255,136,.06);
+}
+
+.auth-icon svg{
+  width:68px;
+  height:68px;
+  filter:drop-shadow(0 0 7px rgba(0,255,136,.45));
+}
+
 .auth-logo{
-  color:var(--green);
+  color:var(--text);
   text-align:center;
   font-size:32px;
   letter-spacing:9px;
   margin-bottom:12px;
-  text-shadow:0 0 14px rgba(0,255,136,.45);
+  text-shadow:0 0 14px rgba(0,255,136,.25);
 }
 
 .auth-subtitle{
@@ -95,420 +124,532 @@ label{
 input,textarea{
   width:100%;
   background:#020604;
-  color:var(--green);
+  color:var(--text);
   border:1px solid var(--border);
   outline:none;
   padding:12px;
 }
 
-input:focus,textarea:focus{
+input::placeholder,
+textarea::placeholder{
+  color:#6f8177;
+}
+
+input:focus,
+textarea:focus{
   border-color:var(--green);
   box-shadow:0 0 12px rgba(0,255,136,.1);
-}
-
-textarea{
-  resize:vertical;
-}
-
-.primary-btn,
-.secondary-btn,
-.action-btn,
-.command-btn,
-.voice-btn{
-  cursor:pointer;
-  font-family:inherit;
 }
 
 .primary-btn{
   width:100%;
   padding:13px;
-  background:var(--green);
-  color:#001;
   border:1px solid var(--green);
+  background:var(--green);
+  color:#00170b;
   font-weight:bold;
-  margin-top:8px;
+  letter-spacing:1px;
+  cursor:pointer;
 }
 
 .primary-btn:hover{
-  box-shadow:0 0 22px rgba(0,255,136,.4);
+  box-shadow:0 0 20px rgba(0,255,136,.25);
 }
 
-.auth-message{
-  min-height:20px;
-  text-align:center;
+.error-text{
   color:var(--danger);
   font-size:11px;
   margin-top:12px;
+  text-align:center;
+  min-height:14px;
 }
+
+/* =========================
+   APP
+========================= */
 
 #app{
   display:none;
   min-height:100vh;
 }
 
-.topbar{
-  height:64px;
-  border-bottom:1px solid var(--border);
-  background:#030806;
+.app-shell{
+  min-height:100vh;
   display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 24px;
-  position:sticky;
-  top:0;
-  z-index:20;
-}
-
-.logo{
-  color:var(--green);
-  font-weight:bold;
-  font-size:20px;
-  letter-spacing:5px;
-}
-
-.system-status{
-  color:var(--muted);
-  font-size:11px;
-}
-
-.status-dot{
-  color:var(--green);
-  text-shadow:0 0 10px var(--green);
-}
-
-.layout{
-  display:flex;
-  min-height:calc(100vh - 64px);
 }
 
 .sidebar{
-  width:235px;
+  width:250px;
+  flex-shrink:0;
   background:#030806;
   border-right:1px solid var(--border);
-  padding:18px 12px;
+  min-height:100vh;
+  padding:22px 14px;
+  position:sticky;
+  top:0;
+  height:100vh;
 }
 
-.user-card{
+.sidebar-logo{
+  color:var(--green);
+  font-size:22px;
+  letter-spacing:5px;
+  text-align:center;
+  margin-bottom:4px;
+  text-shadow:0 0 12px rgba(0,255,136,.35);
+}
+
+.sidebar-version{
+  color:#61756a;
+  text-align:center;
+  font-size:9px;
+  margin-bottom:24px;
+}
+
+.operator-card{
   border:1px solid var(--border);
-  padding:14px;
+  background:#06100a;
+  padding:13px;
   margin-bottom:18px;
 }
 
-.user-card small{
-  display:block;
-  color:var(--muted);
-  font-size:10px;
-  margin-bottom:6px;
+.operator-label{
+  color:#6d8176;
+  font-size:9px;
+  margin-bottom:5px;
 }
 
-.commander-name{
-  color:var(--green);
-  font-size:13px;
+.operator-name{
+  color:var(--text);
+  font-size:12px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.nav{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
 }
 
 .nav-btn{
   width:100%;
-  text-align:left;
-  padding:12px;
-  margin-bottom:6px;
+  padding:11px 12px;
+  border:1px solid transparent;
   background:transparent;
   color:var(--muted);
-  border:1px solid transparent;
+  text-align:left;
+  font-size:11px;
   cursor:pointer;
-  font-size:12px;
 }
 
-.nav-btn:hover,
-.nav-btn.active{
-  color:var(--green);
+.nav-btn:hover{
   border-color:var(--border);
-  background:#07140d;
+  background:#06100a;
+  color:var(--text);
 }
 
-.main-content{
+.nav-btn.active{
+  border-color:var(--green);
+  background:rgba(0,255,136,.06);
+  color:var(--green);
+}
+
+.sidebar-footer{
+  position:absolute;
+  bottom:20px;
+  left:14px;
+  right:14px;
+  color:#52645a;
+  font-size:9px;
+  text-align:center;
+}
+
+/* MAIN */
+
+.main{
   flex:1;
-  padding:26px;
-  overflow-x:hidden;
+  min-width:0;
+  padding:22px;
 }
 
-.page{
-  display:none;
-}
-
-.page.active{
-  display:block;
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:22px;
+  padding-bottom:15px;
+  border-bottom:1px solid var(--border);
 }
 
 .page-title{
-  color:var(--green);
-  font-size:23px;
-  letter-spacing:3px;
-  margin-bottom:8px;
+  color:var(--text);
+  font-size:18px;
+  letter-spacing:2px;
 }
 
 .page-subtitle{
-  color:var(--muted);
-  font-size:11px;
-  margin-bottom:24px;
+  color:#718278;
+  font-size:9px;
+  margin-top:5px;
 }
 
-.stats-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:14px;
-  margin-bottom:18px;
-}
-
-.stat-card,
-.panel{
-  border:1px solid var(--border);
-  background:var(--panel);
-  padding:17px;
-}
-
-.stat-card small{
-  color:var(--muted);
-  font-size:10px;
-}
-
-.stat-number{
+.clock{
   color:var(--green);
-  font-size:28px;
-  margin-top:10px;
+  font-size:11px;
+  white-space:nowrap;
 }
 
-.dashboard-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
+/* PANELS */
+
+.panel{
+  background:var(--panel);
+  border:1px solid var(--border);
+  padding:16px;
+  box-shadow:0 0 20px rgba(0,255,136,.025);
 }
 
 .panel-title{
   color:var(--green);
-  font-size:12px;
+  font-size:11px;
   letter-spacing:1px;
+  margin-bottom:13px;
+}
+
+.panel-text{
+  color:var(--text);
+  font-size:12px;
+  line-height:1.7;
+}
+
+/* GRID */
+
+.grid{
+  display:grid;
+  gap:14px;
+}
+
+.grid-2{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+
+.grid-3{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+}
+
+.grid-4{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+}
+
+/* STATS */
+
+.stat-card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  padding:16px;
+}
+
+.stat-label{
+  color:#718278;
+  font-size:9px;
+  letter-spacing:1px;
+}
+
+.stat-value{
+  color:var(--text);
+  font-size:25px;
+  margin-top:7px;
+}
+
+.stat-value.green{
+  color:var(--green);
+}
+
+/* DASHBOARD */
+
+.welcome{
+  padding:20px;
+  border:1px solid var(--border);
+  background:
+    radial-gradient(circle at 90% 20%,rgba(0,255,136,.07),transparent 30%),
+    var(--panel);
   margin-bottom:14px;
+}
+
+.welcome h2{
+  color:var(--text);
+  font-size:18px;
+  margin-bottom:8px;
+}
+
+.welcome p{
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.7;
+}
+
+.reminder{
+  margin-top:13px;
+  padding:11px;
+  border-left:2px solid var(--green);
+  background:rgba(0,255,136,.035);
+  color:var(--text);
+  font-size:10px;
+}
+
+.activity-box{
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.9;
+  max-height:180px;
+  overflow:auto;
+}
+
+/* AI */
+
+.ai-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 250px;
+  gap:14px;
+}
+
+.ai-terminal{
+  min-width:0;
 }
 
 .chat-box{
   height:430px;
   overflow-y:auto;
+  background:#020604;
   border:1px solid var(--border);
-  background:#010302;
-  padding:16px;
-  margin-bottom:12px;
+  padding:14px;
+  scroll-behavior:smooth;
 }
 
 .message{
-  margin-bottom:13px;
-  line-height:1.7;
-  font-size:12px;
+  padding:9px 11px;
+  margin-bottom:9px;
+  border-left:2px solid;
   white-space:pre-wrap;
-}
-
-.message.nexus{
-  color:var(--green);
+  word-break:break-word;
+  font-size:11px;
+  line-height:1.65;
 }
 
 .message.user{
-  color:#e2eee7;
+  border-color:#7f8b85;
+  color:var(--text);
+  background:rgba(255,255,255,.025);
 }
 
-.command-row{
+.message.nexus{
+  border-color:var(--green);
+  color:var(--text);
+  background:rgba(0,255,136,.035);
+}
+
+.ai-controls{
   display:flex;
-  gap:9px;
+  gap:8px;
+  margin-top:10px;
 }
 
-.command-row input{
+.ai-controls input{
   flex:1;
 }
 
-.command-btn{
-  padding:0 20px;
+.execute-btn{
+  padding:12px 18px;
+  border:1px solid var(--green);
   background:var(--green);
-  color:#001;
-  border:none;
+  color:#00170b;
   font-weight:bold;
+  cursor:pointer;
 }
 
 .voice-btn{
-  padding:0 17px;
-  background:transparent;
-  color:var(--green);
+  padding:12px 15px;
   border:1px solid var(--border);
-  font-weight:bold;
+  background:#06100a;
+  color:var(--text);
+  cursor:pointer;
 }
 
 .voice-btn:hover{
   border-color:var(--green);
-  box-shadow:0 0 14px rgba(0,255,136,.15);
 }
 
 .voice-btn.listening{
-  background:var(--green);
-  color:#001;
-  box-shadow:0 0 20px rgba(0,255,136,.4);
-}
-
-.voice-btn.speaking{
-  background:#07351f;
-  border-color:var(--green);
-  box-shadow:0 0 18px rgba(0,255,136,.25);
+  border-color:var(--danger);
+  color:var(--danger);
 }
 
 .voice-status{
-  color:var(--muted);
-  font-size:10px;
-  margin-top:10px;
-  min-height:16px;
-}
-
-.terminal-hint{
-  color:var(--muted);
-  font-size:10px;
+  color:#6f8177;
+  font-size:9px;
   margin-top:8px;
 }
 
-.add-row{
-  display:flex;
-  gap:9px;
-  margin-bottom:17px;
+.command-list{
+  line-height:1.9;
 }
 
-.add-row input{
+.command-list div{
+  color:var(--muted);
+  font-size:10px;
+}
+
+.command-list span{
+  color:var(--green);
+}
+
+/* TASKS / NOTES / GOALS */
+
+.task-input-row,
+.note-input-row,
+.goal-input-row{
+  display:flex;
+  gap:8px;
+  margin-bottom:14px;
+}
+
+.task-input-row input,
+.note-input-row input,
+.goal-input-row input{
   flex:1;
 }
 
 .action-btn{
-  background:transparent;
-  color:var(--green);
   border:1px solid var(--border);
-  padding:10px 13px;
+  background:#06100a;
+  color:var(--text);
+  padding:9px 11px;
+  font-size:10px;
+  cursor:pointer;
 }
 
 .action-btn:hover{
   border-color:var(--green);
-  box-shadow:0 0 10px rgba(0,255,136,.08);
+  color:var(--green);
 }
 
-.list-item{
+.task-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:11px;
   border:1px solid var(--border);
-  background:var(--panel);
+  margin-bottom:8px;
+  background:#050c08;
+}
+
+.task-check{
+  width:17px;
+  height:17px;
+  accent-color:var(--green);
+  flex-shrink:0;
+}
+
+.task-text{
+  flex:1;
+  color:var(--text);
+  font-size:11px;
+  line-height:1.5;
+}
+
+.task-item.completed .task-text{
+  color:#68776f;
+  text-decoration:line-through;
+}
+
+.note-card,
+.goal-card{
+  border:1px solid var(--border);
+  background:#050c08;
   padding:13px;
   margin-bottom:9px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
 }
 
-.list-left{
-  display:flex;
-  align-items:center;
-  gap:11px;
-  min-width:0;
-}
-
-.list-left input{
-  width:auto;
-}
-
-.list-left span{
-  word-break:break-word;
-}
-
-.completed{
-  text-decoration:line-through;
-  color:var(--muted);
-}
-
-.notes-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:14px;
-}
-
-.note-card{
-  border:1px solid var(--border);
-  background:var(--panel);
-  padding:14px;
-  min-height:160px;
-}
-
-.note-card h3{
-  color:var(--green);
+.note-title,
+.goal-title{
+  color:var(--text);
   font-size:12px;
-  margin-bottom:10px;
-  word-break:break-word;
+  margin-bottom:7px;
 }
 
-.note-card p{
-  color:#b8c8bf;
-  font-size:11px;
+.note-body{
+  color:var(--muted);
+  font-size:10px;
   line-height:1.7;
-  white-space:pre-wrap;
-  word-break:break-word;
 }
 
 .goal-progress{
   width:100%;
-  height:10px;
+  height:7px;
   background:#020604;
   border:1px solid var(--border);
-  margin-top:12px;
+  margin-top:10px;
+  overflow:hidden;
 }
 
 .goal-progress div{
   height:100%;
   background:var(--green);
-  box-shadow:0 0 8px rgba(0,255,136,.3);
 }
 
 .goal-controls{
   display:flex;
-  gap:8px;
-  flex-wrap:wrap;
+  gap:7px;
+  margin-top:10px;
 }
+
+/* LOGS */
 
 .logs-box{
-  border:1px solid var(--border);
-  background:#010302;
-  padding:15px;
-  min-height:430px;
-  color:#9bd8b4;
-  font-size:11px;
-  line-height:1.9;
+  max-height:500px;
   overflow:auto;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.9;
+  white-space:pre-wrap;
 }
 
-.settings-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
+/* SETTINGS */
+
+.settings-section{
+  margin-bottom:20px;
 }
 
-.setting-item{
-  margin-bottom:15px;
-}
-
-.danger{
-  border-color:#7d2b2b;
-  color:#ff7777;
-}
-
-.danger:hover{
-  border-color:#ff7777;
-}
-
-.status-lines{
-  font-size:11px;
-  line-height:2;
-  color:#a7b8ae;
-}
-
-.green{
+.settings-section h3{
   color:var(--green);
+  font-size:11px;
+  margin-bottom:12px;
+  letter-spacing:1px;
 }
+
+.settings-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:12px 0;
+  border-bottom:1px solid rgba(18,61,39,.6);
+}
+
+.settings-label{
+  color:var(--text);
+  font-size:11px;
+}
+
+.settings-description{
+  color:#718278;
+  font-size:9px;
+  margin-top:4px;
+}
+
+/* MOBILE */
 
 .mobile-nav{
   display:none;
@@ -516,347 +657,507 @@ textarea{
 
 @media(max-width:900px){
 
-  .stats-grid{
-    grid-template-columns:1fr 1fr;
+  .sidebar{
+    width:210px;
   }
 
-  .dashboard-grid,
-  .settings-grid{
+  .ai-layout{
     grid-template-columns:1fr;
   }
 
-  .notes-grid{
-    grid-template-columns:1fr 1fr;
+  .grid-4{
+    grid-template-columns:repeat(2,minmax(0,1fr));
   }
+
 }
 
-@media(max-width:650px){
+@media(max-width:700px){
+
+  .app-shell{
+    display:block;
+  }
 
   .sidebar{
     display:none;
   }
 
+  .main{
+    padding:14px;
+    padding-bottom:78px;
+  }
+
   .mobile-nav{
+    position:fixed;
     display:flex;
-    gap:6px;
-    overflow-x:auto;
-    padding:8px;
-    border-bottom:1px solid var(--border);
+    z-index:100;
+    left:0;
+    right:0;
+    bottom:0;
+    height:64px;
     background:#030806;
+    border-top:1px solid var(--border);
+    justify-content:space-around;
+    align-items:center;
   }
 
   .mobile-nav button{
-    white-space:nowrap;
+    border:0;
     background:transparent;
-    border:1px solid var(--border);
-    color:var(--green);
+    color:#718278;
+    font-size:9px;
     padding:8px;
-    font-size:10px;
   }
 
-  .stats-grid,
-  .notes-grid{
+  .mobile-nav button.active{
+    color:var(--green);
+  }
+
+  .grid-2,
+  .grid-3,
+  .grid-4{
     grid-template-columns:1fr;
   }
 
   .topbar{
-    padding:0 13px;
+    align-items:flex-start;
   }
 
-  .logo{
-    font-size:14px;
-    letter-spacing:3px;
+  .page-title{
+    font-size:15px;
   }
 
-  .system-status{
+  .clock{
     font-size:9px;
   }
 
-  .main-content{
-    padding:17px;
+  .auth-box{
+    padding:26px 20px;
   }
 
-  .add-row{
-    flex-direction:column;
+  .auth-logo{
+    font-size:27px;
+    letter-spacing:6px;
   }
 
-  .command-row{
+  .auth-icon{
+    width:78px;
+    height:78px;
+    border-radius:21px;
+  }
+
+  .auth-icon svg{
+    width:58px;
+    height:58px;
+  }
+
+  .ai-controls{
     flex-wrap:wrap;
   }
 
-  .command-row input{
-    width:100%;
+  .ai-controls input{
     flex-basis:100%;
   }
 
-  .command-btn,
+  .execute-btn,
   .voice-btn{
-    min-height:42px;
+    flex:1;
   }
 
-  .list-item{
-    align-items:flex-start;
-    flex-direction:column;
+  .task-input-row,
+  .note-input-row,
+  .goal-input-row{
+    flex-wrap:wrap;
   }
+
+  .task-input-row input,
+  .note-input-row input,
+  .goal-input-row input{
+    flex-basis:100%;
+  }
+
 }
 </style>
 </head>
 
 <body>
 
+<!-- =====================================================
+     AUTH SCREEN
+===================================================== -->
+
 <div id="authScreen">
 
   <div class="auth-box">
 
-    <div class="auth-logo">NEXUS</div>
+    <!-- YOUR ORIGINAL ICON — UNCHANGED -->
+    <div class="auth-icon" aria-label="NEXUS icon">
+
+      <svg viewBox="0 0 100 100" fill="none"
+           xmlns="http://www.w3.org/2000/svg">
+
+        <path
+          d="M50 5L88 27V73L50 95L12 73V27L50 5Z"
+          stroke="#00ff88"
+          stroke-width="2"
+        />
+
+        <path
+          d="M30 68V32L70 68V32"
+          stroke="#00ff88"
+          stroke-width="6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+
+        <path
+          d="M30 32L70 68"
+          stroke="#00ff88"
+          stroke-width="2"
+          opacity=".45"
+        />
+
+        <circle
+          cx="50"
+          cy="50"
+          r="42"
+          stroke="#00ff88"
+          stroke-width="1"
+          opacity=".2"
+        />
+
+      </svg>
+
+    </div>
+
+    <div class="auth-logo">
+      NEXUS
+    </div>
 
     <div class="auth-subtitle">
-      AI COMMAND CENTER // LOCAL ACCESS TERMINAL
+      PERSONAL AI COMMAND CENTER // WELCOME, COMMANDER
     </div>
 
-    <div id="signupSection">
+    <div class="input-group">
 
-      <div class="input-group">
-        <label>DISPLAY NAME</label>
-        <input id="signupName" placeholder="e.g. Joel">
-      </div>
+      <label for="operatorName">
+        OPERATOR NAME
+      </label>
 
-      <div class="input-group">
-        <label>CREATE PASSWORD</label>
-        <input
-          id="signupPassword"
-          type="password"
-          placeholder="Create a local password">
-      </div>
-
-      <button class="primary-btn" onclick="createAccount()">
-        INITIALIZE NEXUS
-      </button>
+      <input
+        id="operatorName"
+        type="text"
+        placeholder="Enter your name"
+        autocomplete="off"
+      >
 
     </div>
 
-    <div id="loginSection" style="display:none">
+    <button
+      id="initializeButton"
+      class="primary-btn"
+      type="button"
+      onclick="enterNexus()"
+    >
+      INITIALIZE NEXUS
+    </button>
 
-      <div class="input-group">
-        <label>PASSWORD</label>
-
-        <input
-          id="loginPassword"
-          type="password"
-          placeholder="Enter password"
-          onkeydown="if(event.key==='Enter')login()">
-
-      </div>
-
-      <button class="primary-btn" onclick="login()">
-        ACCESS NEXUS
-      </button>
-
-    </div>
-
-    <div class="auth-message" id="authMessage"></div>
+    <div id="authError" class="error-text"></div>
 
   </div>
 
 </div>
 
 
+<!-- =====================================================
+     APPLICATION
+===================================================== -->
+
 <div id="app">
 
-  <div class="topbar">
+  <div class="app-shell">
 
-    <div class="logo">
-      NEXUS // COMMAND CENTER
-    </div>
+    <!-- SIDEBAR -->
 
-    <div class="system-status">
+    <aside class="sidebar">
 
-      <span class="status-dot">●</span>
-      ONLINE //
+      <div class="sidebar-logo">
+        NEXUS
+      </div>
 
-      <span id="clock"></span>
+      <div class="sidebar-version">
+        AI COMMAND CENTER // V1.5
+      </div>
 
-    </div>
+      <div class="operator-card">
 
-  </div>
+        <div class="operator-label">
+          CURRENT OPERATOR
+        </div>
+
+        <div id="sidebarName" class="operator-name">
+          COMMANDER
+        </div>
+
+      </div>
+
+      <nav class="nav">
+
+        <button class="nav-btn active"
+                data-page="dashboard"
+                onclick="showPage('dashboard',this)">
+          ▸ DASHBOARD
+        </button>
+
+        <button class="nav-btn"
+                data-page="ai"
+                onclick="showPage('ai',this)">
+          ▸ AI TERMINAL
+        </button>
+
+        <button class="nav-btn"
+                data-page="tasks"
+                onclick="showPage('tasks',this)">
+          ▸ TASKS
+        </button>
+
+        <button class="nav-btn"
+                data-page="notes"
+                onclick="showPage('notes',this)">
+          ▸ NOTES
+        </button>
+
+        <button class="nav-btn"
+                data-page="goals"
+                onclick="showPage('goals',this)">
+          ▸ GOALS
+        </button>
+
+        <button class="nav-btn"
+                data-page="analytics"
+                onclick="showPage('analytics',this)">
+          ▸ ANALYTICS
+        </button>
+
+        <button class="nav-btn"
+                data-page="logs"
+                onclick="showPage('logs',this)">
+          ▸ SYSTEM LOGS
+        </button>
+
+        <button class="nav-btn"
+                data-page="settings"
+                onclick="showPage('settings',this)">
+          ▸ SETTINGS
+        </button>
+
+      </nav>
+
+      <div class="sidebar-footer">
+        NEXUS // SYSTEM READY
+      </div>
+
+    </aside>
 
 
-  <div class="mobile-nav">
+    <!-- MAIN -->
 
-    <button onclick="showPage('dashboard')">HOME</button>
-    <button onclick="showPage('ai')">AI</button>
-    <button onclick="showPage('tasks')">TASKS</button>
-    <button onclick="showPage('notes')">NOTES</button>
-    <button onclick="showPage('goals')">GOALS</button>
-    <button onclick="showPage('analytics')">STATS</button>
-    <button onclick="showPage('logs')">LOGS</button>
-    <button onclick="showPage('settings')">SETTINGS</button>
+    <main class="main">
 
-  </div>
+      <div class="topbar">
 
+        <div>
 
-  <div class="layout">
+          <div id="pageTitle" class="page-title">
+            DASHBOARD
+          </div>
 
-    <div class="sidebar">
+          <div id="pageSubtitle" class="page-subtitle">
+            SYSTEM OVERVIEW
+          </div>
 
-      <div class="user-card">
+        </div>
 
-        <small>ACTIVE OPERATOR</small>
-
-        <div
-          class="commander-name"
-          id="sidebarName">
-          JOEL // COMMANDER
+        <div id="clock" class="clock">
+          00:00:00
         </div>
 
       </div>
 
 
-      <button
-        class="nav-btn active"
-        data-page="dashboard"
-        onclick="showPage('dashboard',this)">
-        ◈ DASHBOARD
-      </button>
+      <!-- =================================================
+           DASHBOARD
+      ================================================== -->
 
-      <button
-        class="nav-btn"
-        data-page="ai"
-        onclick="showPage('ai',this)">
-        ◈ NEXUS TERMINAL
-      </button>
+      <section id="page-dashboard" class="page">
 
-      <button
-        class="nav-btn"
-        data-page="tasks"
-        onclick="showPage('tasks',this)">
-        ◈ TASKS
-      </button>
+        <div class="welcome">
 
-      <button
-        class="nav-btn"
-        data-page="notes"
-        onclick="showPage('notes',this)">
-        ◈ NOTES
-      </button>
+          <h2 id="welcomeMessage">
+            Welcome, Commander.
+          </h2>
 
-      <button
-        class="nav-btn"
-        data-page="goals"
-        onclick="showPage('goals',this)">
-        ◈ GOALS
-      </button>
+          <p>
+            NEXUS is online and ready to assist.
+            Your command center is standing by.
+          </p>
 
-      <button
-        class="nav-btn"
-        data-page="analytics"
-        onclick="showPage('analytics',this)">
-        ◈ ANALYTICS
-      </button>
-
-      <button
-        class="nav-btn"
-        data-page="logs"
-        onclick="showPage('logs',this)">
-        ◈ SYSTEM LOGS
-      </button>
-
-      <button
-        class="nav-btn"
-        data-page="settings"
-        onclick="showPage('settings',this)">
-        ◈ SETTINGS
-      </button>
-
-    </div>
-
-
-    <div class="main-content">
-
-
-      <div id="dashboard" class="page active">
-
-        <div class="page-title">
-          WELCOME BACK, COMMANDER.
-        </div>
-
-        <div
-          class="page-subtitle"
-          id="welcomeMessage">
-          NEXUS is monitoring your command center.
-        </div>
-
-
-        <div class="stats-grid">
-
-          <div class="stat-card">
-            <small>TOTAL TASKS</small>
-            <div
-              class="stat-number"
-              id="totalTasks">
-              0
-            </div>
-          </div>
-
-          <div class="stat-card">
-            <small>COMPLETED</small>
-            <div
-              class="stat-number"
-              id="completedTasks">
-              0
-            </div>
-          </div>
-
-          <div class="stat-card">
-            <small>NOTES</small>
-            <div
-              class="stat-number"
-              id="totalNotes">
-              0
-            </div>
-          </div>
-
-          <div class="stat-card">
-            <small>GOALS</small>
-            <div
-              class="stat-number"
-              id="totalGoals">
-              0
-            </div>
+          <div id="reminderMessage" class="reminder">
+            NEXUS awaiting mission data...
           </div>
 
         </div>
 
+        <div class="grid grid-4">
 
-        <div class="dashboard-grid">
+          <div class="stat-card">
+            <div class="stat-label">TOTAL TASKS</div>
+            <div id="totalTasks" class="stat-value">0</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-label">COMPLETED</div>
+            <div id="completedTasks" class="stat-value green">0</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-label">NOTES</div>
+            <div id="totalNotes" class="stat-value">0</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-label">GOALS</div>
+            <div id="totalGoals" class="stat-value">0</div>
+          </div>
+
+        </div>
+
+        <br>
+
+        <div class="grid grid-2">
 
           <div class="panel">
 
             <div class="panel-title">
-              NEXUS STATUS
+              SYSTEM STATUS
             </div>
 
-            <div class="status-lines">
+            <div class="panel-text">
 
-              <div>
-                <span class="green">●</span>
-                CORE: ONLINE
+              CORE STATUS:
+              <span style="color:#00ff88">
+                ONLINE
+              </span>
+
+              <br>
+
+              DATABASE:
+              <span>LOCAL STORAGE</span>
+
+              <br>
+
+              OPERATOR:
+              <span id="statusOperator">
+                COMMANDER
+              </span>
+
+              <br>
+
+              VOICE SYSTEM:
+              <span style="color:#00ff88">
+                READY
+              </span>
+
+              <br>
+
+              AI INTERFACE:
+              <span id="aiStatusText" style="color:#00ff88">
+                CHECKING...
+              </span>
+
+            </div>
+
+          </div>
+
+          <div class="panel">
+
+            <div class="panel-title">
+              LATEST ACTIVITY
+            </div>
+
+            <div id="latestActivity" class="activity-box">
+              NEXUS awaiting activity...
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           AI TERMINAL
+      ================================================== -->
+
+      <section id="page-ai" class="page" style="display:none">
+
+        <div class="ai-layout">
+
+          <div class="ai-terminal">
+
+            <div class="panel">
+
+              <div class="panel-title">
+                NEXUS AI CORE
               </div>
 
-              <div>
-                <span class="green">●</span>
-                DATABASE: LOCAL STORAGE
+              <div id="chatBox" class="chat-box">
+
+                <div class="message nexus">
+                  NEXUS: Welcome back, Commander.
+                </div>
+
+                <div class="message nexus">
+                  Your AI core is standing by.
+                </div>
+
+                <div class="message nexus">
+                  Talk to me naturally — type your message or use the microphone.
+                </div>
+
               </div>
 
-              <div>
-                <span class="green">●</span>
-                OPERATOR:
-                <span id="statusOperator">JOEL</span>
+              <div class="ai-controls">
+
+                <input
+                  id="aiInput"
+                  type="text"
+                  placeholder="Enter command or ask NEXUS anything..."
+                  autocomplete="off"
+                >
+
+                <button
+                  id="voiceButton"
+                  class="voice-btn"
+                  type="button"
+                  onclick="startVoiceInput()"
+                >
+                  🎙️ VOICE
+                </button>
+
+                <button
+                  id="executeButton"
+                  class="execute-btn"
+                  type="button"
+                  onclick="sendAI()"
+                >
+                  EXECUTE
+                </button>
+
               </div>
 
-              <div>
-                <span class="green">●</span>
-                SECURITY: LOCAL ACCESS
+              <div id="voiceStatus" class="voice-status">
+                Voice system ready.
               </div>
 
             </div>
@@ -867,434 +1168,404 @@ textarea{
           <div class="panel">
 
             <div class="panel-title">
-              COMMANDER'S REMINDER
+              COMMANDS
             </div>
 
-            <p
-              id="reminderMessage"
-              style="color:#a7b8ae;font-size:12px;line-height:1.8">
+            <div class="command-list">
 
-              Add your first task and begin building momentum.
+              <div>
+                <span>/help</span> — command list
+              </div>
 
-            </p>
+              <div>
+                <span>/tasks</span> — task status
+              </div>
 
-          </div>
+              <div>
+                <span>/notes</span> — note count
+              </div>
 
-        </div>
+              <div>
+                <span>/goals</span> — goal status
+              </div>
 
+              <div>
+                <span>/status</span> — system status
+              </div>
 
-        <div
-          class="panel"
-          style="margin-top:16px">
+              <div>
+                <span>/time</span> — current time
+              </div>
 
-          <div class="panel-title">
-            LATEST ACTIVITY
-          </div>
+              <div>
+                <span>/clear</span> — clear terminal
+              </div>
 
-          <div
-            id="latestActivity"
-            style="font-size:11px;color:#9bd8b4;line-height:1.8">
+              <br>
 
-            NEXUS awaiting activity...
+              <div>
+                Or simply talk to NEXUS normally.
+              </div>
 
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <div id="ai" class="page">
-
-        <div class="page-title">
-          NEXUS COMMAND TERMINAL
-        </div>
-
-        <div class="page-subtitle">
-          AI CORE // VOICE + TEXT INTERFACE
-        </div>
-
-
-        <div
-          class="chat-box"
-          id="chatBox">
-
-          <div class="message nexus">
-NEXUS: Welcome back, Commander.
-AI interface initialized.
-You can type to me or use the microphone.
-          </div>
-
-        </div>
-
-
-        <div class="command-row">
-
-          <input
-            id="aiInput"
-            placeholder="Enter command or message..."
-            onkeydown="if(event.key==='Enter')sendAI()">
-
-          <button
-            class="voice-btn"
-            id="voiceButton"
-            onclick="startVoiceInput()">
-            🎙️ VOICE
-          </button>
-
-          <button
-            class="command-btn"
-            onclick="sendAI()">
-            EXECUTE
-          </button>
-
-        </div>
-
-
-        <div
-          class="voice-status"
-          id="voiceStatus">
-          Voice system ready.
-        </div>
-
-
-        <div class="terminal-hint">
-
-          COMMANDS:
-          /help
-          /tasks
-          /notes
-          /goals
-          /status
-          /time
-          /clear
-
-        </div>
-
-      </div>
-
-
-      <div id="tasks" class="page">
-
-        <div class="page-title">
-          TASK MANAGER
-        </div>
-
-        <div class="page-subtitle">
-          Every completed task moves the mission forward.
-        </div>
-
-
-        <div class="add-row">
-
-          <input
-            id="taskInput"
-            placeholder="Enter new task..."
-            onkeydown="if(event.key==='Enter')addTask()">
-
-          <button
-            class="action-btn"
-            onclick="addTask()">
-            ADD TASK
-          </button>
-
-        </div>
-
-
-        <div id="taskList"></div>
-
-      </div>
-
-
-      <div id="notes" class="page">
-
-        <div class="page-title">
-          NOTES DATABASE
-        </div>
-
-        <div class="page-subtitle">
-          Store your ideas inside NEXUS.
-        </div>
-
-
-        <div
-          class="panel"
-          style="margin-bottom:17px">
-
-          <div class="input-group">
-
-            <label>NOTE TITLE</label>
-
-            <input
-              id="noteTitle"
-              placeholder="Title">
-
-          </div>
-
-
-          <div class="input-group">
-
-            <label>NOTE CONTENT</label>
-
-            <textarea
-              id="noteContent"
-              rows="5"
-              placeholder="Write something..."></textarea>
-
-          </div>
-
-
-          <button
-            class="action-btn"
-            onclick="addNote()">
-
-            SAVE NOTE
-
-          </button>
-
-        </div>
-
-
-        <div
-          class="notes-grid"
-          id="notesList"></div>
-
-      </div>
-
-
-      <div id="goals" class="page">
-
-        <div class="page-title">
-          GOAL SYSTEM
-        </div>
-
-        <div class="page-subtitle">
-          Track progress. Build momentum.
-        </div>
-
-
-        <div class="add-row">
-
-          <input
-            id="goalInput"
-            placeholder="Enter a new goal..."
-            onkeydown="if(event.key==='Enter')addGoal()">
-
-          <button
-            class="action-btn"
-            onclick="addGoal()">
-            ADD GOAL
-          </button>
-
-        </div>
-
-
-        <div id="goalList"></div>
-
-      </div>
-
-
-      <div id="analytics" class="page">
-
-        <div class="page-title">
-          ANALYTICS
-        </div>
-
-        <div class="page-subtitle">
-          NEXUS productivity overview.
-        </div>
-
-
-        <div class="stats-grid">
-
-          <div class="stat-card">
-
-            <small>COMPLETION RATE</small>
-
-            <div
-              class="stat-number"
-              id="completionRate">
-              0%
-            </div>
-
-          </div>
-
-
-          <div class="stat-card">
-
-            <small>ACTIVE TASKS</small>
-
-            <div
-              class="stat-number"
-              id="activeTasks">
-              0
-            </div>
-
-          </div>
-
-
-          <div class="stat-card">
-
-            <small>NOTES STORED</small>
-
-            <div
-              class="stat-number"
-              id="analyticsNotes">
-              0
-            </div>
-
-          </div>
-
-
-          <div class="stat-card">
-
-            <small>GOAL PROGRESS</small>
-
-            <div
-              class="stat-number"
-              id="goalAverage">
-              0%
             </div>
 
           </div>
 
         </div>
 
+      </section>
+
+
+      <!-- =================================================
+           TASKS
+      ================================================== -->
+
+      <section id="page-tasks" class="page" style="display:none">
 
         <div class="panel">
 
           <div class="panel-title">
-            NEXUS ANALYSIS
+            MISSION TASKS
           </div>
 
-          <p
-            id="analysisText"
-            style="font-size:12px;color:#b8c8bf;line-height:1.8">
+          <div class="task-input-row">
 
-            No significant activity recorded yet.
-
-          </p>
-
-        </div>
-
-      </div>
-
-
-      <div id="logs" class="page">
-
-        <div class="page-title">
-          SYSTEM LOGS
-        </div>
-
-        <div class="page-subtitle">
-          Activity recorded by NEXUS.
-        </div>
-
-
-        <div
-          class="logs-box"
-          id="logsBox"></div>
-
-      </div>
-
-
-      <div id="settings" class="page">
-
-        <div class="page-title">
-          SETTINGS
-        </div>
-
-        <div class="page-subtitle">
-          Configure your NEXUS environment.
-        </div>
-
-
-        <div class="settings-grid">
-
-
-          <div class="panel">
-
-            <div class="panel-title">
-              OPERATOR PROFILE
-            </div>
-
-
-            <div class="setting-item">
-
-              <label>DISPLAY NAME</label>
-
-              <input id="settingsName">
-
-            </div>
-
+            <input
+              id="taskInput"
+              type="text"
+              placeholder="Enter a new task..."
+            >
 
             <button
               class="action-btn"
-              onclick="saveSettings()">
-
-              SAVE PROFILE
-
+              onclick="addTask()"
+            >
+              ADD TASK
             </button>
 
           </div>
 
-
-          <div class="panel">
-
-            <div class="panel-title">
-              DATA MANAGEMENT
-            </div>
-
-
-            <button
-              class="action-btn"
-              onclick="exportData()">
-
-              EXPORT NEXUS DATA
-
-            </button>
-
-
-            <br><br>
-
-
-            <button
-              class="action-btn danger"
-              onclick="clearAllData()">
-
-              RESET NEXUS
-
-            </button>
-
-          </div>
+          <div id="taskList"></div>
 
         </div>
 
+      </section>
 
-        <div
-          class="panel"
-          style="margin-top:16px">
+
+      <!-- =================================================
+           NOTES
+      ================================================== -->
+
+      <section id="page-notes" class="page" style="display:none">
+
+        <div class="panel">
 
           <div class="panel-title">
-            ABOUT NEXUS
+            NEXUS NOTES
           </div>
 
-          <p
-            style="font-size:11px;color:#a7b8ae;line-height:1.8">
+          <div class="note-input-row">
 
-            NEXUS V1.4 is a browser-based personal command center
-            with AI conversation, voice input and intelligent voice output.
-            Your personal information is stored locally in this browser.
-            The AI connection is handled through the local NEXUS server.
+            <input
+              id="noteInput"
+              type="text"
+              placeholder="Write a note..."
+            >
 
-          </p>
+            <button
+              class="action-btn"
+              onclick="addNote()"
+            >
+              SAVE NOTE
+            </button>
+
+          </div>
+
+          <div id="noteList"></div>
 
         </div>
 
-      </div>
+      </section>
 
 
-    </div>
+      <!-- =================================================
+           GOALS
+      ================================================== -->
+
+      <section id="page-goals" class="page" style="display:none">
+
+        <div class="panel">
+
+          <div class="panel-title">
+            OBJECTIVES
+          </div>
+
+          <div class="goal-input-row">
+
+            <input
+              id="goalInput"
+              type="text"
+              placeholder="Enter a new goal..."
+            >
+
+            <button
+              class="action-btn"
+              onclick="addGoal()"
+            >
+              ADD GOAL
+            </button>
+
+          </div>
+
+          <div id="goalList"></div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           ANALYTICS
+      ================================================== -->
+
+      <section id="page-analytics" class="page" style="display:none">
+
+        <div class="grid grid-3">
+
+          <div class="stat-card">
+            <div class="analytics-number" id="analyticsTasks">
+              0
+            </div>
+            <div class="analytics-label">
+              TOTAL TASKS
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="analytics-number" id="analyticsCompleted">
+              0
+            </div>
+            <div class="analytics-label">
+              COMPLETED TASKS
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="analytics-number" id="analyticsCompletion">
+              0%
+            </div>
+            <div class="analytics-label">
+              COMPLETION RATE
+            </div>
+          </div>
+
+        </div>
+
+        <br>
+
+        <div class="panel">
+
+          <div class="panel-title">
+            SYSTEM ANALYSIS
+          </div>
+
+          <div id="analyticsText" class="analysis">
+            NEXUS is collecting activity data...
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           LOGS
+      ================================================== -->
+
+      <section id="page-logs" class="page" style="display:none">
+
+        <div class="panel">
+
+          <div class="panel-title">
+            SYSTEM LOGS
+          </div>
+
+          <div id="logsBox" class="logs-box">
+            NEXUS boot sequence initialized...
+          </div>
+
+          <br>
+
+          <button
+            class="action-btn"
+            onclick="clearLogs()"
+          >
+            CLEAR LOGS
+          </button>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           SETTINGS
+      ================================================== -->
+
+      <section id="page-settings" class="page" style="display:none">
+
+        <div class="panel">
+
+          <div class="settings-section">
+
+            <h3>
+              OPERATOR
+            </h3>
+
+            <div class="settings-row">
+
+              <div>
+
+                <div class="settings-label">
+                  Current Operator
+                </div>
+
+                <div class="settings-description">
+                  Name used by NEXUS.
+                </div>
+
+              </div>
+
+              <button
+                class="action-btn"
+                onclick="changeOperator()"
+              >
+                CHANGE
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <div class="settings-section">
+
+            <h3>
+              AI CORE
+            </h3>
+
+            <div class="settings-row">
+
+              <div>
+
+                <div class="settings-label">
+                  AI Connection
+                </div>
+
+                <div class="settings-description">
+                  Test connection to the NEXUS server.
+                </div>
+
+              </div>
+
+              <button
+                class="action-btn"
+                onclick="checkAIConnection(true)"
+              >
+                TEST
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <div class="settings-section">
+
+            <h3>
+              DATA
+            </h3>
+
+            <div class="settings-row">
+
+              <div>
+
+                <div class="settings-label">
+                  Reset NEXUS
+                </div>
+
+                <div class="settings-description">
+                  Delete local tasks, notes, goals and operator data.
+                </div>
+
+              </div>
+
+              <button
+                class="action-btn"
+                onclick="resetNexus()"
+              >
+                RESET
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+  <!-- MOBILE NAV -->
+
+  <div class="mobile-nav">
+
+    <button
+      class="active"
+      data-page="dashboard"
+      onclick="showPage('dashboard',this)"
+    >
+      HOME
+    </button>
+
+    <button
+      data-page="ai"
+      onclick="showPage('ai',this)"
+    >
+      AI
+    </button>
+
+    <button
+      data-page="tasks"
+      onclick="showPage('tasks',this)"
+    >
+      TASKS
+    </button>
+
+    <button
+      data-page="notes"
+      onclick="showPage('notes',this)"
+    >
+      NOTES
+    </button>
+
+    <button
+      data-page="goals"
+      onclick="showPage('goals',this)"
+    >
+      GOALS
+    </button>
+
+    <button
+      data-page="settings"
+      onclick="showPage('settings',this)"
+    >
+      SET
+    </button>
 
   </div>
 
@@ -1303,70 +1574,959 @@ You can type to me or use the microphone.
 
 <script>
 
-const STORAGE_KEY = "nexusDataV1";
+/* =====================================================
+   NEXUS CORE
+===================================================== */
 
+const NEXUS = {
 
-let nexusData = {
+  operator:
+    localStorage.getItem("nexus_operator") || "",
 
-  name:"",
-  password:"",
-  tasks:[],
-  notes:[],
-  goals:[],
-  logs:[]
+  tasks:
+    JSON.parse(localStorage.getItem("nexus_tasks") || "[]"),
+
+  notes:
+    JSON.parse(localStorage.getItem("nexus_notes") || "[]"),
+
+  goals:
+    JSON.parse(localStorage.getItem("nexus_goals") || "[]"),
+
+  logs:
+    JSON.parse(localStorage.getItem("nexus_logs") || "[]"),
+
+  history: []
 
 };
 
 
-function normalizeData(){
+/* =====================================================
+   DOM READY
+===================================================== */
 
-  if(!Array.isArray(nexusData.tasks))
-    nexusData.tasks=[];
+document.addEventListener("DOMContentLoaded", () => {
 
-  if(!Array.isArray(nexusData.notes))
-    nexusData.notes=[];
+  /* ENTER KEY ON LOGIN */
 
-  if(!Array.isArray(nexusData.goals))
-    nexusData.goals=[];
+  const operatorInput =
+    document.getElementById("operatorName");
 
-  if(!Array.isArray(nexusData.logs))
-    nexusData.logs=[];
+  if(operatorInput){
+
+    operatorInput.addEventListener("keydown", event => {
+
+      if(event.key === "Enter"){
+        enterNexus();
+      }
+
+    });
+
+  }
+
+
+  /* ENTER KEY FOR AI */
+
+  const aiInput =
+    document.getElementById("aiInput");
+
+  if(aiInput){
+
+    aiInput.addEventListener("keydown", event => {
+
+      if(event.key === "Enter"){
+        event.preventDefault();
+        sendAI();
+      }
+
+    });
+
+  }
+
+
+  /* ENTER KEY FOR TASK */
+
+  const taskInput =
+    document.getElementById("taskInput");
+
+  if(taskInput){
+
+    taskInput.addEventListener("keydown", event => {
+
+      if(event.key === "Enter"){
+        addTask();
+      }
+
+    });
+
+  }
+
+
+  /* ENTER KEY FOR NOTE */
+
+  const noteInput =
+    document.getElementById("noteInput");
+
+  if(noteInput){
+
+    noteInput.addEventListener("keydown", event => {
+
+      if(event.key === "Enter"){
+        addNote();
+      }
+
+    });
+
+  }
+
+
+  /* ENTER KEY FOR GOAL */
+
+  const goalInput =
+    document.getElementById("goalInput");
+
+  if(goalInput){
+
+    goalInput.addEventListener("keydown", event => {
+
+      if(event.key === "Enter"){
+        addGoal();
+      }
+
+    });
+
+  }
+
+
+  updateClock();
+  setInterval(updateClock,1000);
+
+  renderAll();
+
+  /*
+     IMPORTANT:
+     If an operator already exists,
+     restore the session automatically.
+  */
+
+  if(NEXUS.operator){
+
+    openNexus();
+
+  }
+
+});
+
+
+/* =====================================================
+   LOGIN / INITIALIZE
+===================================================== */
+
+function enterNexus(){
+
+  const input =
+    document.getElementById("operatorName");
+
+  const error =
+    document.getElementById("authError");
+
+  const button =
+    document.getElementById("initializeButton");
+
+  if(!input) return;
+
+  const name =
+    input.value.trim();
+
+  error.textContent = "";
+
+  if(!name){
+
+    error.textContent =
+      "ENTER YOUR OPERATOR NAME TO INITIALIZE NEXUS.";
+
+    input.focus();
+
+    return;
+
+  }
+
+  if(name.length < 2){
+
+    error.textContent =
+      "OPERATOR NAME MUST CONTAIN AT LEAST 2 CHARACTERS.";
+
+    input.focus();
+
+    return;
+
+  }
+
+  /*
+     Save operator locally.
+  */
+
+  NEXUS.operator = name;
+
+  localStorage.setItem(
+    "nexus_operator",
+    name
+  );
+
+  /*
+     Prevent double clicks.
+  */
+
+  button.disabled = true;
+  button.textContent = "INITIALIZING...";
+
+  addLog(
+    "Operator " + name + " initialized NEXUS."
+  );
+
+  /*
+     Open immediately.
+     No server request is required for login.
+  */
+
+  setTimeout(() => {
+
+    openNexus();
+
+    button.disabled = false;
+    button.textContent = "INITIALIZE NEXUS";
+
+  },300);
 
 }
 
 
-function loadData(){
+/* =====================================================
+   OPEN NEXUS
+===================================================== */
 
-  const current =
-    localStorage.getItem(STORAGE_KEY);
+function openNexus(){
 
-  const old =
-    localStorage.getItem("nexusData");
+  const auth =
+    document.getElementById("authScreen");
 
-  const saved =
-    current || old;
+  const app =
+    document.getElementById("app");
+
+  if(!auth || !app) return;
+
+  auth.style.display = "none";
+  app.style.display = "block";
+
+  updateOperatorUI();
+  renderAll();
+
+  checkAIConnection(false);
+
+}
 
 
-  if(saved){
+/* =====================================================
+   OPERATOR UI
+===================================================== */
 
-    try{
+function updateOperatorUI(){
 
-      nexusData =
-        JSON.parse(saved);
+  const name =
+    NEXUS.operator || "COMMANDER";
 
-      normalizeData();
+  const sidebarName =
+    document.getElementById("sidebarName");
 
-      document.getElementById(
-        "signupSection"
-      ).style.display="none";
+  const statusOperator =
+    document.getElementById("statusOperator");
 
-      document.getElementById(
-        "loginSection"
-      ).style.display="block";
+  const welcome =
+    document.getElementById("welcomeMessage");
 
-    }catch(e){
+  if(sidebarName)
+    sidebarName.textContent = name;
 
-      console.error(e);
+  if(statusOperator)
+    statusOperator.textContent = name;
+
+  if(welcome)
+    welcome.textContent =
+      "Welcome, " + name + ".";
+
+}
+
+
+/* =====================================================
+   PAGE NAVIGATION
+===================================================== */
+
+const pageInfo = {
+
+  dashboard:{
+    title:"DASHBOARD",
+    subtitle:"SYSTEM OVERVIEW"
+  },
+
+  ai:{
+    title:"AI TERMINAL",
+    subtitle:"NEXUS ARTIFICIAL INTELLIGENCE CORE"
+  },
+
+  tasks:{
+    title:"TASKS",
+    subtitle:"MISSION TASK MANAGEMENT"
+  },
+
+  notes:{
+    title:"NOTES",
+    subtitle:"NEXUS KNOWLEDGE STORAGE"
+  },
+
+  goals:{
+    title:"GOALS",
+    subtitle:"OBJECTIVES AND PROGRESS"
+  },
+
+  analytics:{
+    title:"ANALYTICS",
+    subtitle:"OPERATOR PERFORMANCE"
+  },
+
+  logs:{
+    title:"SYSTEM LOGS",
+    subtitle:"NEXUS ACTIVITY RECORD"
+  },
+
+  settings:{
+    title:"SETTINGS",
+    subtitle:"SYSTEM CONFIGURATION"
+  }
+
+};
+
+
+function showPage(page, clickedButton){
+
+  document.querySelectorAll(".page")
+    .forEach(section => {
+
+      section.style.display =
+        section.id === "page-" + page
+          ? "block"
+          : "none";
+
+    });
+
+
+  document.querySelectorAll(
+    ".nav-btn,.mobile-nav button"
+  ).forEach(button => {
+
+    button.classList.remove("active");
+
+  });
+
+
+  document.querySelectorAll(
+    `[data-page="${page}"]`
+  ).forEach(button => {
+
+    button.classList.add("active");
+
+  });
+
+
+  const info =
+    pageInfo[page];
+
+  if(info){
+
+    document.getElementById(
+      "pageTitle"
+    ).textContent = info.title;
+
+    document.getElementById(
+      "pageSubtitle"
+    ).textContent = info.subtitle;
+
+  }
+
+
+  if(page === "analytics"){
+    renderAnalytics();
+  }
+
+  if(page === "logs"){
+    renderLogs();
+  }
+
+}
+
+
+/* =====================================================
+   CLOCK
+===================================================== */
+
+function updateClock(){
+
+  const clock =
+    document.getElementById("clock");
+
+  if(!clock) return;
+
+  const now =
+    new Date();
+
+  clock.textContent =
+    now.toLocaleTimeString(
+      [],
+      {
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit"
+      }
+    );
+
+}
+
+
+/* =====================================================
+   LOCAL STORAGE
+===================================================== */
+
+function saveData(){
+
+  localStorage.setItem(
+    "nexus_tasks",
+    JSON.stringify(NEXUS.tasks)
+  );
+
+  localStorage.setItem(
+    "nexus_notes",
+    JSON.stringify(NEXUS.notes)
+  );
+
+  localStorage.setItem(
+    "nexus_goals",
+    JSON.stringify(NEXUS.goals)
+  );
+
+  localStorage.setItem(
+    "nexus_logs",
+    JSON.stringify(NEXUS.logs)
+  );
+
+}
+
+
+/* =====================================================
+   LOGGING
+===================================================== */
+
+function addLog(message){
+
+  const time =
+    new Date().toLocaleString();
+
+  NEXUS.logs.unshift(
+    `[${time}] ${message}`
+  );
+
+  if(NEXUS.logs.length > 200){
+    NEXUS.logs =
+      NEXUS.logs.slice(0,200);
+  }
+
+  saveData();
+
+  renderLogs();
+  renderLatestActivity();
+
+}
+
+
+/* =====================================================
+   TASKS
+===================================================== */
+
+function addTask(){
+
+  const input =
+    document.getElementById("taskInput");
+
+  const text =
+    input.value.trim();
+
+  if(!text) return;
+
+  NEXUS.tasks.push({
+
+    id:Date.now(),
+
+    text:text,
+
+    completed:false,
+
+    created:new Date().toISOString()
+
+  });
+
+  input.value = "";
+
+  saveData();
+
+  addLog(
+    "New task created: " + text
+  );
+
+  renderTasks();
+  updateStats();
+
+}
+
+
+function toggleTask(id){
+
+  const task =
+    NEXUS.tasks.find(
+      item => item.id === id
+    );
+
+  if(!task) return;
+
+  task.completed =
+    !task.completed;
+
+  saveData();
+
+  addLog(
+    task.completed
+      ? "Task completed: " + task.text
+      : "Task reopened: " + task.text
+  );
+
+  renderTasks();
+  updateStats();
+
+}
+
+
+function deleteTask(id){
+
+  const task =
+    NEXUS.tasks.find(
+      item => item.id === id
+    );
+
+  NEXUS.tasks =
+    NEXUS.tasks.filter(
+      item => item.id !== id
+    );
+
+  saveData();
+
+  if(task){
+
+    addLog(
+      "Task deleted: " + task.text
+    );
+
+  }
+
+  renderTasks();
+  updateStats();
+
+}
+
+
+function renderTasks(){
+
+  const list =
+    document.getElementById("taskList");
+
+  if(!list) return;
+
+  if(!NEXUS.tasks.length){
+
+    list.innerHTML =
+      `<div class="analysis">
+        No active missions. Add a task above.
+      </div>`;
+
+    return;
+
+  }
+
+  list.innerHTML =
+    NEXUS.tasks.map(task => `
+
+      <div class="task-item ${
+        task.completed ? "completed" : ""
+      }">
+
+        <input
+          class="task-check"
+          type="checkbox"
+          ${task.completed ? "checked" : ""}
+          onchange="toggleTask(${task.id})"
+        >
+
+        <div class="task-text">
+          ${escapeHTML(task.text)}
+        </div>
+
+        <button
+          class="action-btn"
+          onclick="deleteTask(${task.id})"
+        >
+          DELETE
+        </button>
+
+      </div>
+
+    `).join("");
+
+}
+
+
+/* =====================================================
+   NOTES
+===================================================== */
+
+function addNote(){
+
+  const input =
+    document.getElementById("noteInput");
+
+  const text =
+    input.value.trim();
+
+  if(!text) return;
+
+  NEXUS.notes.unshift({
+
+    id:Date.now(),
+
+    text:text,
+
+    created:new Date().toISOString()
+
+  });
+
+  input.value = "";
+
+  saveData();
+
+  addLog(
+    "New note saved."
+  );
+
+  renderNotes();
+  updateStats();
+
+}
+
+
+function deleteNote(id){
+
+  NEXUS.notes =
+    NEXUS.notes.filter(
+      note => note.id !== id
+    );
+
+  saveData();
+
+  addLog(
+    "Note deleted."
+  );
+
+  renderNotes();
+  updateStats();
+
+}
+
+
+function renderNotes(){
+
+  const list =
+    document.getElementById("noteList");
+
+  if(!list) return;
+
+  if(!NEXUS.notes.length){
+
+    list.innerHTML =
+      `<div class="analysis">
+        No notes stored yet.
+      </div>`;
+
+    return;
+
+  }
+
+  list.innerHTML =
+    NEXUS.notes.map(note => `
+
+      <div class="note-card">
+
+        <div class="note-title">
+          NOTE // ${new Date(note.created).toLocaleDateString()}
+        </div>
+
+        <div class="note-body">
+          ${escapeHTML(note.text)}
+        </div>
+
+        <br>
+
+        <button
+          class="action-btn"
+          onclick="deleteNote(${note.id})"
+        >
+          DELETE
+        </button>
+
+      </div>
+
+    `).join("");
+
+}
+
+
+/* =====================================================
+   GOALS
+===================================================== */
+
+function addGoal(){
+
+  const input =
+    document.getElementById("goalInput");
+
+  const text =
+    input.value.trim();
+
+  if(!text) return;
+
+  NEXUS.goals.push({
+
+    id:Date.now(),
+
+    text:text,
+
+    progress:0,
+
+    created:new Date().toISOString()
+
+  });
+
+  input.value = "";
+
+  saveData();
+
+  addLog(
+    "New goal created: " + text
+  );
+
+  renderGoals();
+  updateStats();
+
+}
+
+
+function changeGoalProgress(id,amount){
+
+  const goal =
+    NEXUS.goals.find(
+      item => item.id === id
+    );
+
+  if(!goal) return;
+
+  goal.progress =
+    Math.max(
+      0,
+      Math.min(
+        100,
+        goal.progress + amount
+      )
+    );
+
+  saveData();
+
+  renderGoals();
+  updateStats();
+
+}
+
+
+function deleteGoal(id){
+
+  NEXUS.goals =
+    NEXUS.goals.filter(
+      goal => goal.id !== id
+    );
+
+  saveData();
+
+  addLog(
+    "Goal deleted."
+  );
+
+  renderGoals();
+  updateStats();
+
+}
+
+
+function renderGoals(){
+
+  const list =
+    document.getElementById("goalList");
+
+  if(!list) return;
+
+  if(!NEXUS.goals.length){
+
+    list.innerHTML =
+      `<div class="analysis">
+        No objectives registered.
+      </div>`;
+
+    return;
+
+  }
+
+  list.innerHTML =
+    NEXUS.goals.map(goal => `
+
+      <div class="goal-card">
+
+        <div class="goal-title">
+          ${escapeHTML(goal.text)}
+        </div>
+
+        <div class="analysis">
+          PROGRESS: ${goal.progress}%
+        </div>
+
+        <div class="goal-progress">
+          <div style="width:${goal.progress}%"></div>
+        </div>
+
+        <div class="goal-controls">
+
+          <button
+            class="action-btn"
+            onclick="changeGoalProgress(${goal.id},-10)"
+          >
+            -10
+          </button>
+
+          <button
+            class="action-btn"
+            onclick="changeGoalProgress(${goal.id},10)"
+          >
+            +10
+          </button>
+
+          <button
+            class="action-btn"
+            onclick="deleteGoal(${goal.id})"
+          >
+            DELETE
+          </button>
+
+        </div>
+
+      </div>
+
+    `).join("");
+
+}
+
+
+/* =====================================================
+   STATS
+===================================================== */
+
+function updateStats(){
+
+  const totalTasks =
+    NEXUS.tasks.length;
+
+  const completed =
+    NEXUS.tasks.filter(
+      task => task.completed
+    ).length;
+
+  const totalNotes =
+    NEXUS.notes.length;
+
+  const totalGoals =
+    NEXUS.goals.length;
+
+
+  setText(
+    "totalTasks",
+    totalTasks
+  );
+
+  setText(
+    "completedTasks",
+    completed
+  );
+
+  setText(
+    "totalNotes",
+    totalNotes
+  );
+
+  setText(
+    "totalGoals",
+    totalGoals
+  );
+
+
+  setText(
+    "analyticsTasks",
+    totalTasks
+  );
+
+  setText(
+    "analyticsCompleted",
+    completed
+  );
+
+
+  const rate =
+    totalTasks
+      ? Math.round(
+          completed / totalTasks * 100
+        )
+      : 0;
+
+  setText(
+    "analyticsCompletion",
+    rate + "%"
+  );
+
+
+  const reminder =
+    document.getElementById(
+      "reminderMessage"
+    );
+
+  if(reminder){
+
+    if(totalTasks === 0){
+
+      reminder.textContent =
+        "NEXUS awaiting mission data...";
+
+    }else{
+
+      reminder.textContent =
+        `${completed} of ${totalTasks} tasks completed.`;
 
     }
 
@@ -1375,792 +2535,246 @@ function loadData(){
 }
 
 
-function saveData(){
+function renderAnalytics(){
 
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(nexusData)
-  );
+  const total =
+    NEXUS.tasks.length;
 
-}
+  const completed =
+    NEXUS.tasks.filter(
+      task => task.completed
+    ).length;
 
+  const rate =
+    total
+      ? Math.round(
+          completed / total * 100
+        )
+      : 0;
 
-function createAccount(){
-
-  const name =
+  const text =
     document.getElementById(
-      "signupName"
-    ).value.trim();
-
-  const password =
-    document.getElementById(
-      "signupPassword"
-    ).value;
-
-  const message =
-    document.getElementById(
-      "authMessage"
+      "analyticsText"
     );
 
+  if(!text) return;
 
-  if(!name || !password){
+  if(total === 0){
 
-    message.innerText =
-      "ENTER A NAME AND PASSWORD, COMMANDER.";
+    text.textContent =
+      "No task data available yet. Create some missions and NEXUS will begin analyzing your productivity.";
 
     return;
 
   }
 
+  text.textContent =
+    `Operator performance: ${rate}% task completion rate. ` +
+    `${completed} of ${total} registered tasks are complete. ` +
+    `NEXUS is monitoring your command activity locally.`;
 
-  nexusData.name =
-    name;
-
-  nexusData.password =
-    password;
+}
 
 
-  addLog(
-    "NEXUS ACCOUNT INITIALIZED FOR " +
-    name.toUpperCase()
-  );
+/* =====================================================
+   ACTIVITY
+===================================================== */
 
+function renderLatestActivity(){
+
+  const box =
+    document.getElementById(
+      "latestActivity"
+    );
+
+  if(!box) return;
+
+  if(!NEXUS.logs.length){
+
+    box.textContent =
+      "NEXUS awaiting activity...";
+
+    return;
+
+  }
+
+  box.textContent =
+    NEXUS.logs
+      .slice(0,8)
+      .join("\n");
+
+}
+
+
+/* =====================================================
+   LOGS
+===================================================== */
+
+function renderLogs(){
+
+  const box =
+    document.getElementById(
+      "logsBox"
+    );
+
+  if(!box) return;
+
+  if(!NEXUS.logs.length){
+
+    box.textContent =
+      "No system logs.";
+
+    return;
+
+  }
+
+  box.textContent =
+    NEXUS.logs.join("\n");
+
+}
+
+
+function clearLogs(){
+
+  if(!confirm(
+    "Clear all NEXUS system logs?"
+  )) return;
+
+  NEXUS.logs = [];
 
   saveData();
 
-  openApp();
+  renderLogs();
 
 }
 
 
-function login(){
+/* =====================================================
+   AI COMMANDS
+===================================================== */
 
-  const password =
-    document.getElementById(
-      "loginPassword"
-    ).value;
+function localCommand(command){
 
-  const message =
-    document.getElementById(
-      "authMessage"
-    );
+  const cmd =
+    command.trim().toLowerCase();
 
 
-  if(password === nexusData.password){
+  if(cmd === "/help"){
 
-    document.getElementById(
-      "loginPassword"
-    ).value="";
+    return `
+AVAILABLE COMMANDS
 
-    openApp();
+/help    — show command list
+/tasks   — show task status
+/notes   — show note count
+/goals   — show goal status
+/status  — show NEXUS status
+/time    — show current time
+/clear   — clear terminal
 
-  }else{
-
-    message.innerText =
-      "ACCESS DENIED. INVALID PASSWORD.";
-
-  }
-
-}
-
-
-function openApp(){
-
-  document.getElementById(
-    "authScreen"
-  ).style.display="none";
-
-  document.getElementById(
-    "app"
-  ).style.display="block";
-
-
-  document.getElementById(
-    "sidebarName"
-  ).innerText =
-    nexusData.name.toUpperCase() +
-    " // COMMANDER";
-
-
-  document.getElementById(
-    "settingsName"
-  ).value =
-    nexusData.name;
-
-
-  addLog(
-    "COMMANDER ACCESS GRANTED."
-  );
-
-
-  updateAll();
-
-}
-
-
-function showPage(pageId,button){
-
-  document.querySelectorAll(
-    ".page"
-  ).forEach(page =>
-    page.classList.remove("active")
-  );
-
-
-  const page =
-    document.getElementById(pageId);
-
-
-  if(page)
-    page.classList.add("active");
-
-
-  document.querySelectorAll(
-    ".nav-btn"
-  ).forEach(btn => {
-
-    btn.classList.toggle(
-      "active",
-      btn.dataset.page === pageId
-    );
-
-  });
-
-
-  if(button &&
-     button.classList.contains("nav-btn")){
-
-    button.classList.add("active");
-
-  }
-
-}
-
-
-/* =========================
-   TASK SYSTEM
-========================= */
-
-
-function addTask(){
-
-  const input =
-    document.getElementById(
-      "taskInput"
-    );
-
-  const text =
-    input.value.trim();
-
-
-  if(!text)
-    return;
-
-
-  nexusData.tasks.push({
-
-    id:Date.now()+Math.random(),
-
-    text:text,
-
-    completed:false
-
-  });
-
-
-  input.value="";
-
-
-  addLog(
-    "NEW TASK CREATED: " +
-    text
-  );
-
-
-  updateAll();
-
-}
-
-
-function toggleTask(id){
-
-  const task =
-    nexusData.tasks.find(
-      t => String(t.id) === String(id)
-    );
-
-
-  if(!task)
-    return;
-
-
-  task.completed =
-    !task.completed;
-
-
-  addLog(
-
-    task.completed
-      ? "TASK COMPLETED: " + task.text
-      : "TASK REOPENED: " + task.text
-
-  );
-
-
-  updateAll();
-
-}
-
-
-function deleteTask(id){
-
-  nexusData.tasks =
-    nexusData.tasks.filter(
-      t => String(t.id) !== String(id)
-    );
-
-
-  addLog(
-    "TASK REMOVED."
-  );
-
-
-  updateAll();
-
-}
-
-
-function renderTasks(){
-
-  const list =
-    document.getElementById(
-      "taskList"
-    );
-
-
-  list.innerHTML="";
-
-
-  if(nexusData.tasks.length===0){
-
-    list.innerHTML =
-      "<div class='panel' style='color:#7e9b89;font-size:11px'>NO TASKS DETECTED.</div>";
-
-    return;
+You can also talk to NEXUS normally.
+`;
 
   }
 
 
-  nexusData.tasks
-    .slice()
-    .reverse()
-    .forEach(task => {
-
-
-      const item =
-        document.createElement("div");
-
-      item.className =
-        "list-item";
-
-
-      const left =
-        document.createElement("div");
-
-      left.className =
-        "list-left";
-
-
-      const check =
-        document.createElement("input");
-
-      check.type =
-        "checkbox";
-
-      check.checked =
-        !!task.completed;
-
-
-      check.addEventListener(
-        "change",
-        () => toggleTask(task.id)
-      );
-
-
-      const span =
-        document.createElement("span");
-
-      span.textContent =
-        task.text;
-
-
-      if(task.completed)
-        span.className =
-          "completed";
-
-
-      const del =
-        document.createElement("button");
-
-      del.className =
-        "action-btn";
-
-      del.textContent =
-        "DELETE";
-
-
-      del.addEventListener(
-        "click",
-        () => deleteTask(task.id)
-      );
-
-
-      left.appendChild(check);
-
-      left.appendChild(span);
-
-      item.appendChild(left);
-
-      item.appendChild(del);
-
-      list.appendChild(item);
-
-    });
-
-}
-
-
-/* =========================
-   NOTES
-========================= */
-
-
-function addNote(){
-
-  const title =
-    document.getElementById(
-      "noteTitle"
-    ).value.trim();
-
-
-  const content =
-    document.getElementById(
-      "noteContent"
-    ).value.trim();
-
-
-  if(!title || !content)
-    return;
-
-
-  nexusData.notes.push({
-
-    id:Date.now()+Math.random(),
-
-    title:title,
-
-    content:content
-
-  });
-
-
-  document.getElementById(
-    "noteTitle"
-  ).value="";
-
-
-  document.getElementById(
-    "noteContent"
-  ).value="";
-
-
-  addLog(
-    "NOTE SAVED: " +
-    title
-  );
-
-
-  updateAll();
-
-}
-
-
-function deleteNote(id){
-
-  nexusData.notes =
-    nexusData.notes.filter(
-      n => String(n.id) !== String(id)
-    );
-
-
-  addLog(
-    "NOTE DELETED."
-  );
-
-
-  updateAll();
-
-}
-
-
-function renderNotes(){
-
-  const list =
-    document.getElementById(
-      "notesList"
-    );
-
-
-  list.innerHTML="";
-
-
-  if(nexusData.notes.length===0){
-
-    list.innerHTML =
-      "<div class='panel' style='color:#7e9b89;font-size:11px'>NO NOTES STORED YET.</div>";
-
-    return;
+  if(cmd === "/tasks"){
+
+    const total =
+      NEXUS.tasks.length;
+
+    const completed =
+      NEXUS.tasks.filter(
+        task => task.completed
+      ).length;
+
+    return `
+TASK STATUS
+
+Total: ${total}
+Completed: ${completed}
+Remaining: ${total - completed}
+`;
 
   }
 
 
-  nexusData.notes
-    .slice()
-    .reverse()
-    .forEach(note => {
+  if(cmd === "/notes"){
 
+    return `
+NOTES
 
-      const card =
-        document.createElement("div");
-
-      card.className =
-        "note-card";
-
-
-      const title =
-        document.createElement("h3");
-
-      title.textContent =
-        note.title;
-
-
-      const content =
-        document.createElement("p");
-
-      content.textContent =
-        note.content;
-
-
-      const br =
-        document.createElement("br");
-
-
-      const del =
-        document.createElement("button");
-
-      del.className =
-        "action-btn";
-
-      del.textContent =
-        "DELETE";
-
-
-      del.addEventListener(
-        "click",
-        () => deleteNote(note.id)
-      );
-
-
-      card.appendChild(title);
-
-      card.appendChild(content);
-
-      card.appendChild(br);
-
-      card.appendChild(del);
-
-
-      list.appendChild(card);
-
-    });
-
-}
-
-
-/* =========================
-   GOALS
-========================= */
-
-
-function addGoal(){
-
-  const input =
-    document.getElementById(
-      "goalInput"
-    );
-
-
-  const text =
-    input.value.trim();
-
-
-  if(!text)
-    return;
-
-
-  nexusData.goals.push({
-
-    id:Date.now()+Math.random(),
-
-    text:text,
-
-    progress:0
-
-  });
-
-
-  input.value="";
-
-
-  addLog(
-    "NEW GOAL CREATED: " +
-    text
-  );
-
-
-  updateAll();
-
-}
-
-
-function changeGoalProgress(id,amount){
-
-  const goal =
-    nexusData.goals.find(
-      g => String(g.id) === String(id)
-    );
-
-
-  if(!goal)
-    return;
-
-
-  goal.progress =
-    Math.max(
-      0,
-      Math.min(
-        100,
-        Number(goal.progress || 0) +
-        amount
-      )
-    );
-
-
-  addLog(
-    "GOAL PROGRESS UPDATED: " +
-    goal.text +
-    " // " +
-    goal.progress +
-    "%"
-  );
-
-
-  updateAll();
-
-}
-
-
-function deleteGoal(id){
-
-  nexusData.goals =
-    nexusData.goals.filter(
-      g => String(g.id) !== String(id)
-    );
-
-
-  addLog(
-    "GOAL REMOVED."
-  );
-
-
-  updateAll();
-
-}
-
-
-function renderGoals(){
-
-  const list =
-    document.getElementById(
-      "goalList"
-    );
-
-
-  list.innerHTML="";
-
-
-  if(nexusData.goals.length===0){
-
-    list.innerHTML =
-      "<div class='panel' style='color:#7e9b89;font-size:11px'>NO GOALS DETECTED.</div>";
-
-    return;
+Stored notes: ${NEXUS.notes.length}
+`;
 
   }
 
 
-  nexusData.goals
-    .slice()
-    .reverse()
-    .forEach(goal => {
+  if(cmd === "/goals"){
+
+    if(!NEXUS.goals.length){
+
+      return "No goals registered.";
+
+    }
+
+    return `
+GOALS
+
+${NEXUS.goals.map(
+  goal =>
+    `• ${goal.text} — ${goal.progress}%`
+).join("\n")}
+`;
+
+  }
 
 
-      const item =
-        document.createElement("div");
+  if(cmd === "/status"){
 
-      item.className =
-        "panel";
+    return `
+NEXUS SYSTEM STATUS
 
-      item.style.marginBottom =
-        "11px";
+Operator: ${NEXUS.operator || "COMMANDER"}
+Core: ONLINE
+Local Storage: ONLINE
+Voice Interface: READY
+AI Endpoint: /api/chat
+`;
 
-
-      const title =
-        document.createElement("div");
-
-      title.textContent =
-        goal.text;
+  }
 
 
-      const progress =
-        document.createElement("div");
+  if(cmd === "/time"){
 
-      progress.className =
-        "goal-progress";
+    return `
+CURRENT TIME
 
+${new Date().toLocaleString()}
+`;
 
-      const fill =
-        document.createElement("div");
-
-
-      fill.style.width =
-        Math.max(
-          0,
-          Math.min(
-            100,
-            Number(goal.progress || 0)
-          )
-        ) + "%";
+  }
 
 
-      progress.appendChild(fill);
+  if(cmd === "/clear"){
+
+    document.getElementById(
+      "chatBox"
+    ).innerHTML = "";
+
+    return null;
+
+  }
 
 
-      const percent =
-        document.createElement("div");
-
-
-      percent.style.cssText =
-        "color:#00ff88;font-size:11px;margin-top:8px";
-
-
-      percent.textContent =
-        goal.progress + "%";
-
-
-      const controls =
-        document.createElement("div");
-
-      controls.className =
-        "goal-controls";
-
-      controls.style.marginTop =
-        "11px";
-
-
-      const minus =
-        document.createElement("button");
-
-      minus.className =
-        "action-btn";
-
-      minus.textContent =
-        "-10%";
-
-
-      minus.addEventListener(
-        "click",
-        () =>
-          changeGoalProgress(
-            goal.id,
-            -10
-          )
-      );
-
-
-      const plus =
-        document.createElement("button");
-
-      plus.className =
-        "action-btn";
-
-      plus.textContent =
-        "+10%";
-
-
-      plus.addEventListener(
-        "click",
-        () =>
-          changeGoalProgress(
-            goal.id,
-            10
-          )
-      );
-
-
-      const del =
-        document.createElement("button");
-
-      del.className =
-        "action-btn";
-
-      del.textContent =
-        "DELETE";
-
-
-      del.addEventListener(
-        "click",
-        () =>
-          deleteGoal(goal.id)
-      );
-
-
-      controls.append(
-        minus,
-        plus,
-        del
-      );
-
-
-      item.append(
-        title,
-        progress,
-        percent,
-        controls
-      );
-
-
-      list.appendChild(item);
-
-    });
+  return undefined;
 
 }
 
 
-/* =========================
-   REAL AI CHAT
-========================= */
-
+/* =====================================================
+   SEND AI MESSAGE
+===================================================== */
 
 async function sendAI(){
 
@@ -2169,28 +2783,45 @@ async function sendAI(){
       "aiInput"
     );
 
+  const button =
+    document.getElementById(
+      "executeButton"
+    );
 
-  const text =
+  if(!input) return;
+
+  const message =
     input.value.trim();
 
-
-  if(!text)
-    return;
+  if(!message) return;
 
 
-  addChatMessage(
-    "COMMANDER: " + text,
-    "user"
-  );
+  /* LOCAL COMMAND */
 
+  const commandResult =
+    localCommand(message);
 
-  input.value="";
+  if(commandResult !== undefined){
 
+    addChatMessage(
+      "user",
+      message
+    );
 
-  if(text.startsWith("/")){
+    if(commandResult !== null){
 
-    handleCommand(
-      text.trim().toLowerCase()
+      addChatMessage(
+        "nexus",
+        commandResult
+      );
+
+    }
+
+    input.value = "";
+
+    addLog(
+      "Local AI command executed: " +
+      message
     );
 
     return;
@@ -2198,35 +2829,21 @@ async function sendAI(){
   }
 
 
-  const thinking =
-    document.createElement("div");
-
-
-  thinking.className =
-    "message nexus";
-
-
-  thinking.textContent =
-    "NEXUS: Processing...";
-
-
-  thinking.id =
-    "nexusThinking";
-
-
-  const chat =
-    document.getElementById(
-      "chatBox"
-    );
-
-
-  chat.appendChild(
-    thinking
+  addChatMessage(
+    "user",
+    message
   );
 
+  input.value = "";
 
-  chat.scrollTop =
-    chat.scrollHeight;
+  button.disabled = true;
+  button.textContent = "CONNECTING...";
+
+
+  addChatMessage(
+    "nexus",
+    "NEXUS: Connecting to AI core..."
+  );
 
 
   try{
@@ -2235,7 +2852,6 @@ async function sendAI(){
       await fetch(
         "/api/chat",
         {
-
           method:"POST",
 
           headers:{
@@ -2244,9 +2860,202 @@ async function sendAI(){
           },
 
           body:JSON.stringify({
-            message:text
+
+            message:message,
+
+            history:
+              NEXUS.history.slice(-10)
+
           })
 
+        }
+      );
+
+
+    let data;
+
+    try{
+
+      data =
+        await response.json();
+
+    }catch{
+
+      throw new Error(
+        "Server returned an invalid response."
+      );
+
+    }
+
+
+    if(!response.ok){
+
+      throw new Error(
+        data.error ||
+        "AI server returned an error."
+      );
+
+    }
+
+
+    if(!data.reply){
+
+      throw new Error(
+        "NEXUS received an empty AI response."
+      );
+
+    }
+
+
+    /*
+       Remove the temporary connection
+       message before displaying the
+       actual response.
+    */
+
+    removeLastNexusMessage();
+
+    addChatMessage(
+      "nexus",
+      data.reply
+    );
+
+
+    NEXUS.history.push({
+
+      role:"user",
+      content:message
+
+    });
+
+    NEXUS.history.push({
+
+      role:"assistant",
+      content:data.reply
+
+    });
+
+
+    NEXUS.history =
+      NEXUS.history.slice(-10);
+
+
+    addLog(
+      "AI request completed."
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "NEXUS FRONTEND AI ERROR:",
+      error
+    );
+
+
+    removeLastNexusMessage();
+
+    addChatMessage(
+      "nexus",
+      "NEXUS: AI core connection failed.\n\n" +
+      error.message +
+      "\n\nCheck that the NEXUS server is running and OPENROUTER_API_KEY is configured."
+    );
+
+
+    addLog(
+      "AI request failed: " +
+      error.message
+    );
+
+  }finally{
+
+    button.disabled = false;
+    button.textContent = "EXECUTE";
+
+    input.focus();
+
+  }
+
+}
+
+
+/* =====================================================
+   CHAT UI
+===================================================== */
+
+function addChatMessage(type,text){
+
+  const box =
+    document.getElementById(
+      "chatBox"
+    );
+
+  if(!box) return;
+
+  const div =
+    document.createElement("div");
+
+  div.className =
+    "message " + type;
+
+  div.textContent =
+    type === "nexus"
+      ? "NEXUS: " + text
+      : "YOU: " + text;
+
+  box.appendChild(div);
+
+  box.scrollTop =
+    box.scrollHeight;
+
+}
+
+
+function removeLastNexusMessage(){
+
+  const box =
+    document.getElementById(
+      "chatBox"
+    );
+
+  if(!box) return;
+
+  const messages =
+    box.querySelectorAll(
+      ".message.nexus"
+    );
+
+  if(messages.length){
+
+    messages[
+      messages.length - 1
+    ].remove();
+
+  }
+
+}
+
+
+/* =====================================================
+   AI CONNECTION CHECK
+===================================================== */
+
+async function checkAIConnection(showMessage){
+
+  const status =
+    document.getElementById(
+      "aiStatusText"
+    );
+
+  try{
+
+    const response =
+      await fetch(
+        "/api/health",
+        {
+          method:"GET",
+          cache:"no-store"
         }
       );
 
@@ -2255,117 +3064,127 @@ async function sendAI(){
       await response.json();
 
 
-    const thinkingMessage =
-      document.getElementById(
-        "nexusThinking"
-      );
-
-
-    if(thinkingMessage)
-      thinkingMessage.remove();
-
-
     if(!response.ok){
 
       throw new Error(
-        data.error ||
-        "AI request failed."
+        "Server unavailable."
       );
 
     }
 
 
-    if(data.reply){
+    if(status){
+
+      if(data.aiConfigured){
+
+        status.textContent =
+          "CONNECTED";
+
+        status.style.color =
+          "#00ff88";
+
+      }else{
+
+        status.textContent =
+          "SERVER ONLINE / API KEY MISSING";
+
+        status.style.color =
+          "#ff7070";
+
+      }
+
+    }
+
+
+    if(showMessage){
 
       addChatMessage(
-        "NEXUS: " + data.reply,
-        "nexus"
-      );
-
-
-      speakNexus(
-        data.reply
-      );
-
-    }else{
-
-      addChatMessage(
-        "NEXUS: AI core returned no response.",
-        "nexus"
+        "nexus",
+        data.aiConfigured
+          ? "AI core connection verified. Online and ready."
+          : "NEXUS server is online, but the OpenRouter API key is missing."
       );
 
     }
 
+
+    return data;
 
   }catch(error){
 
-    const thinkingMessage =
-      document.getElementById(
-        "nexusThinking"
+    if(status){
+
+      status.textContent =
+        "OFFLINE";
+
+      status.style.color =
+        "#ff7070";
+
+    }
+
+
+    if(showMessage){
+
+      addChatMessage(
+        "nexus",
+        "Unable to reach the NEXUS server.\n\n" +
+        error.message
       );
 
-
-    if(thinkingMessage)
-      thinkingMessage.remove();
+    }
 
 
-    console.error(
-      "NEXUS CONNECTION ERROR:",
-      error
-    );
-
-
-    addChatMessage(
-      "NEXUS: Connection to AI core failed. Check the server terminal.",
-      "nexus"
-    );
+    return null;
 
   }
 
 }
 
 
-/* =========================
+/* =====================================================
    VOICE INPUT
-========================= */
-
+===================================================== */
 
 let recognition = null;
-let isListening = false;
-
 
 function startVoiceInput(){
-
-  const voiceStatus =
-    document.getElementById(
-      "voiceStatus"
-    );
-
-  const voiceButton =
-    document.getElementById(
-      "voiceButton"
-    );
-
 
   const SpeechRecognition =
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
 
+  const button =
+    document.getElementById(
+      "voiceButton"
+    );
+
+  const status =
+    document.getElementById(
+      "voiceStatus"
+    );
 
   if(!SpeechRecognition){
 
-    voiceStatus.innerText =
-      "VOICE INPUT IS NOT SUPPORTED BY THIS BROWSER.";
+    status.textContent =
+      "Voice input is not supported by this browser.";
 
     return;
 
   }
 
 
-  if(isListening){
+  if(recognition){
 
-    if(recognition)
-      recognition.stop();
+    recognition.stop();
+
+    recognition = null;
+
+    button.classList.remove(
+      "listening"
+    );
+
+    status.textContent =
+      "Voice system ready.";
 
     return;
 
@@ -2375,93 +3194,70 @@ function startVoiceInput(){
   recognition =
     new SpeechRecognition();
 
-
   recognition.lang =
     "en-US";
 
+  recognition.interimResults =
+    false;
 
   recognition.continuous =
     false;
 
 
-  recognition.interimResults =
-    false;
+  recognition.onstart = () => {
 
+    button.classList.add(
+      "listening"
+    );
 
-  recognition.onstart =
-    function(){
+    button.textContent =
+      "🛑 LISTENING";
 
-      isListening =
-        true;
+    status.textContent =
+      "Listening...";
 
-      voiceButton.classList.add(
-        "listening"
-      );
-
-      voiceButton.innerText =
-        "🛑 STOP";
-
-      voiceStatus.innerText =
-        "LISTENING... SPEAK NOW, COMMANDER.";
-
-    };
+  };
 
 
   recognition.onresult =
-    function(event){
+    event => {
 
       const transcript =
         event.results[0][0].transcript;
-
 
       document.getElementById(
         "aiInput"
       ).value =
         transcript;
 
-
-      voiceStatus.innerText =
-        "VOICE CAPTURED. EXECUTING...";
-
-
-      setTimeout(
-        () => sendAI(),
-        300
-      );
+      status.textContent =
+        "Voice captured.";
 
     };
 
 
   recognition.onerror =
-    function(event){
+    event => {
 
-      console.error(
-        "VOICE INPUT ERROR:",
-        event.error
-      );
-
-
-      voiceStatus.innerText =
-        "VOICE ERROR: " +
+      status.textContent =
+        "Voice error: " +
         event.error;
 
     };
 
 
-  recognition.onend =
-    function(){
+  recognition.onend = () => {
 
-      isListening =
-        false;
+    button.classList.remove(
+      "listening"
+    );
 
-      voiceButton.classList.remove(
-        "listening"
-      );
+    button.textContent =
+      "🎙️ VOICE";
 
-      voiceButton.innerText =
-        "🎙️ VOICE";
+    recognition = null;
 
-    };
+  };
 
 
   recognition.start();
@@ -2469,1057 +3265,130 @@ function startVoiceInput(){
 }
 
 
-/* =========================
-   VOICE OUTPUT
-========================= */
-
-
-let currentSpeech = null;
-
-
-function cleanTextForSpeech(text){
-
-  if(!text)
-    return "";
-
-
-  let clean =
-    String(text);
-
-
-  clean =
-    clean.replace(
-      /https?:\/\/\S+/gi,
-      ""
-    );
-
-
-  clean =
-    clean.replace(
-      /\[([^\]]+)\]\([^)]+\)/g,
-      "$1"
-    );
-
-
-  clean =
-    clean.replace(
-      /```[\s\S]*?```/g,
-      ""
-    );
-
-
-  clean =
-    clean.replace(
-      /`([^`]+)`/g,
-      "$1"
-    );
-
-
-  clean =
-    clean.replace(
-      /^\s*#{1,6}\s*/gm,
-      ""
-    );
-
-
-  clean =
-    clean.replace(
-      /[*_~]/g,
-      ""
-    );
-
-
-  clean =
-    clean.replace(
-      /^[\s]*[-•◦▪▫●○■□►▶️»]+\s*/gm,
-      ""
-    );
-
-
-  clean =
-    clean.replace(
-      /[\u{1F000}-\u{1FAFF}]/gu,
-      ""
-    );
-
-
-  clean =
-    clean.replace(
-      /[\u{2600}-\u{27BF}]/gu,
-      ""
-    );
-
-
-  clean =
-    clean.replace(
-      /[\u{2300}-\u{23FF}]/gu,
-      ""
-    );
-
-
-  clean =
-    clean.replace(
-      /[★☆✦✧✓✔✕✖→←↑↓↔️⇒⇐∞≈≠≤≥]/g,
-      ""
-    );
-
-
-  clean =
-    clean.replace(
-      /([!?.,])\1{2,}/g,
-      "$1"
-    );
-
-
-  clean =
-    clean.replace(
-      /\r?\n+/g,
-      ". "
-    );
-
-
-  clean =
-    clean.replace(
-      /\s+/g,
-      " "
-    );
-
-
-  return clean.trim();
-
-}
-
-
-function getBestEnglishVoice(){
-
-  const voices =
-    window.speechSynthesis.getVoices();
-
-
-  if(!voices.length)
-    return null;
-
-
-  const preferred =
-    voices.find(
-      voice =>
-        /^en-US$/i.test(voice.lang) &&
-        !/espeak|compact|novelty/i.test(voice.name)
-    );
-
-
-  if(preferred)
-    return preferred;
-
-
-  const english =
-    voices.find(
-      voice =>
-        /^en/i.test(voice.lang) &&
-        !/espeak|compact|novelty/i.test(voice.name)
-    );
-
-
-  return english || null;
-
-}
-
-
-function speakNexus(text){
-
-  if(!("speechSynthesis" in window)){
-
-    console.log(
-      "Speech synthesis is not supported."
-    );
-
-    return;
-
-  }
-
-
-  const cleanText =
-    cleanTextForSpeech(text);
-
-
-  if(!cleanText)
-    return;
-
-
-  window.speechSynthesis.cancel();
-
-
-  const voiceButton =
-    document.getElementById(
-      "voiceButton"
-    );
-
-  const voiceStatus =
-    document.getElementById(
-      "voiceStatus"
-    );
-
-
-  const speech =
-    new SpeechSynthesisUtterance(
-      cleanText
-    );
-
-
-  speech.rate =
-    0.92;
-
-
-  speech.pitch =
-    1;
-
-
-  speech.volume =
-    1;
-
-
-  const voice =
-    getBestEnglishVoice();
-
-
-  if(voice)
-    speech.voice =
-      voice;
-
-
-  currentSpeech =
-    speech;
-
-
-  speech.onstart =
-    function(){
-
-      if(voiceButton)
-        voiceButton.classList.add(
-          "speaking"
-        );
-
-      if(voiceStatus)
-        voiceStatus.innerText =
-          "NEXUS SPEAKING...";
-
-    };
-
-
-  speech.onend =
-    function(){
-
-      if(voiceButton)
-        voiceButton.classList.remove(
-          "speaking"
-        );
-
-      if(voiceStatus)
-        voiceStatus.innerText =
-          "Voice system ready.";
-
-      currentSpeech =
-        null;
-
-    };
-
-
-  speech.onerror =
-    function(event){
-
-      console.error(
-        "NEXUS SPEECH ERROR:",
-        event
-      );
-
-
-      if(voiceButton)
-        voiceButton.classList.remove(
-          "speaking"
-        );
-
-      if(voiceStatus)
-        voiceStatus.innerText =
-          "Voice output error.";
-
-      currentSpeech =
-        null;
-
-    };
-
-
-  window.speechSynthesis.speak(
-    speech
-  );
-
-}
-
-
-if("speechSynthesis" in window){
-
-  window.speechSynthesis.onvoiceschanged =
-    function(){
-
-      getBestEnglishVoice();
-
-    };
-
-}
-
-
-/* =========================
-   COMMAND SYSTEM
-========================= */
-
-
-function handleCommand(command){
-
-  const parts =
-    command.split(/\s+/);
-
-
-  const cmd =
-    parts[0];
-
-
-  let response="";
-
-
-  switch(cmd){
-
-    case "/help":
-
-      response =
-`AVAILABLE COMMANDS
-
-/help     - display command list
-/tasks    - view task status
-/notes    - view note count
-/goals    - view goals
-/status   - system status
-/time     - current system time
-/clear    - clear terminal display
-
-NORMAL MESSAGES ARE ALSO ACCEPTED, COMMANDER.`;
-
-      break;
-
-
-    case "/tasks":
-
-      response =
-        getTasksCommand();
-
-      break;
-
-
-    case "/notes":
-
-      response =
-        nexusData.notes.length === 0
-          ? "NOTES DATABASE EMPTY."
-          : "NOTES STORED: " +
-            nexusData.notes.length +
-            ".";
-
-      break;
-
-
-    case "/goals":
-
-      response =
-        getGoalsCommand();
-
-      break;
-
-
-    case "/status":
-
-      response =
-`NEXUS STATUS REPORT
-
-CORE: ONLINE
-DATABASE: LOCAL STORAGE
-OPERATOR: ${nexusData.name.toUpperCase()}
-TASKS: ${nexusData.tasks.length}
-NOTES: ${nexusData.notes.length}
-GOALS: ${nexusData.goals.length}
-SECURITY: LOCAL ACCESS
-VOICE INPUT: AVAILABLE
-VOICE OUTPUT: AVAILABLE`;
-
-      break;
-
-
-    case "/time":
-
-      response =
-        "CURRENT SYSTEM TIME: " +
-        new Date().toLocaleTimeString();
-
-      break;
-
-
-    case "/clear":
-
-      document.getElementById(
-        "chatBox"
-      ).innerHTML="";
-
-
-      addChatMessage(
-        "NEXUS: TERMINAL CLEARED. READY FOR NEW COMMANDS, COMMANDER.",
-        "nexus"
-      );
-
-
-      addLog(
-        "TERMINAL DISPLAY CLEARED."
-      );
-
-
-      saveData();
-
-
-      return;
-
-
-    default:
-
-      response =
-        "UNKNOWN COMMAND: " +
-        cmd +
-        "\nTYPE /help FOR AVAILABLE COMMANDS.";
-
-  }
-
-
-  setTimeout(
-    () => {
-
-      addChatMessage(
-        "NEXUS: " + response,
-        "nexus"
-      );
-
-
-      if(cmd !== "/clear")
-        speakNexus(response);
-
-    },
-    180
-  );
-
-
-  addLog(
-    "COMMAND EXECUTED: " +
-    cmd.toUpperCase()
-  );
-
-
-  saveData();
-
-}
-
-
-/* =========================
-   AI INFORMATION COMMANDS
-========================= */
-
-
-function getTasksCommand(){
-
-  if(nexusData.tasks.length===0){
-
-    return "TASK DATABASE EMPTY.";
-
-  }
-
-
-  const active =
-    nexusData.tasks.filter(
-      t => !t.completed
-    );
-
-
-  const done =
-    nexusData.tasks.filter(
-      t => t.completed
-    );
-
-
-  let result =
-`TASK STATUS
-
-TOTAL: ${nexusData.tasks.length}
-ACTIVE: ${active.length}
-COMPLETED: ${done.length}`;
-
-
-  if(active.length){
-
-    result +=
-      "\n\nACTIVE TASKS:";
-
-
-    active
-      .slice(0,5)
-      .forEach(
-        (task,i) => {
-
-          result +=
-            `\n${i+1}. ${task.text}`;
-
-        }
-      );
-
-
-    if(active.length > 5){
-
-      result +=
-        `\n... AND ${active.length-5} MORE`;
-
-    }
-
-  }
-
-
-  return result;
-
-}
-
-
-function getGoalsCommand(){
-
-  if(nexusData.goals.length===0){
-
-    return "NO GOALS REGISTERED, COMMANDER.";
-
-  }
-
-
-  let result =
-    "REGISTERED GOALS:";
-
-
-  nexusData.goals
-    .slice(0,6)
-    .forEach(
-      (goal,i) => {
-
-        result +=
-          `\n${i+1}. ${goal.text} // ${goal.progress}%`;
-
-      }
-    );
-
-
-  if(nexusData.goals.length > 6){
-
-    result +=
-      `\n... AND ${nexusData.goals.length-6} MORE`;
-
-  }
-
-
-  return result;
-
-}
-
-
-function addChatMessage(
-  text,
-  type
-){
-
-  const chat =
-    document.getElementById(
-      "chatBox"
-    );
-
-
-  const message =
-    document.createElement(
-      "div"
-    );
-
-
-  message.className =
-    "message " + type;
-
-
-  message.textContent =
-    text;
-
-
-  chat.appendChild(
-    message
-  );
-
-
-  chat.scrollTop =
-    chat.scrollHeight;
-
-}
-
-
-/* =========================
-   LOGGING
-========================= */
-
-
-function addLog(message){
-
-  const time =
-    new Date().toLocaleTimeString();
-
-
-  nexusData.logs.push(
-    `${time} // ${message}`
-  );
-
-
-  if(nexusData.logs.length > 100){
-
-    nexusData.logs.shift();
-
-  }
-
-}
-
-
-/* =========================
-   DASHBOARD
-========================= */
-
-
-function renderLogs(){
-
-  const box =
-    document.getElementById(
-      "logsBox"
-    );
-
-
-  if(nexusData.logs.length===0){
-
-    box.textContent =
-      "> NO SYSTEM ACTIVITY RECORDED.";
-
-    return;
-
-  }
-
-
-  box.innerHTML="";
-
-
-  nexusData.logs
-    .slice()
-    .reverse()
-    .forEach(log => {
-
-      const line =
-        document.createElement(
-          "div"
-        );
-
-
-      line.textContent =
-        "> " + log;
-
-
-      box.appendChild(
-        line
-      );
-
-    });
-
-}
-
-
-function updateDashboard(){
-
-  const total =
-    nexusData.tasks.length;
-
-
-  const completed =
-    nexusData.tasks.filter(
-      t => t.completed
-    ).length;
-
-
-  const active =
-    total - completed;
-
-
-  document.getElementById(
-    "totalTasks"
-  ).innerText =
-    total;
-
-
-  document.getElementById(
-    "completedTasks"
-  ).innerText =
-    completed;
-
-
-  document.getElementById(
-    "totalNotes"
-  ).innerText =
-    nexusData.notes.length;
-
-
-  document.getElementById(
-    "totalGoals"
-  ).innerText =
-    nexusData.goals.length;
-
-
-  document.getElementById(
-    "statusOperator"
-  ).innerText =
-    nexusData.name.toUpperCase();
-
-
-  document.getElementById(
-    "reminderMessage"
-  ).innerText =
-
-    active > 0
-
-      ? `Commander, you have ${active} active task${active===1?"":"s"}. Time to execute.`
-
-      : "No active tasks detected. Either you're incredibly productive or suspiciously free.";
-
-
-  const hour =
-    new Date().getHours();
-
-
-  let greeting =
-    "Good evening";
-
-
-  if(hour < 12)
-    greeting =
-      "Good morning";
-
-  else if(hour < 18)
-    greeting =
-      "Good afternoon";
-
-
-  document.getElementById(
-    "welcomeMessage"
-  ).innerText =
-    `${greeting}, ${nexusData.name}. NEXUS is online and ready.`;
-
-
-  const latest =
-    nexusData.logs
-      .slice(-5)
-      .reverse();
-
-
-  const latestBox =
-    document.getElementById(
-      "latestActivity"
-    );
-
-
-  if(latest.length===0){
-
-    latestBox.textContent =
-      "NEXUS awaiting activity...";
-
-  }else{
-
-    latestBox.innerHTML="";
-
-
-    latest.forEach(
-      log => {
-
-        const div =
-          document.createElement(
-            "div"
-          );
-
-
-        div.textContent =
-          "> " + log;
-
-
-        latestBox.appendChild(
-          div
-        );
-
-      }
-    );
-
-  }
-
-}
-
-
-/* =========================
-   ANALYTICS
-========================= */
-
-
-function updateAnalytics(){
-
-  const total =
-    nexusData.tasks.length;
-
-
-  const completed =
-    nexusData.tasks.filter(
-      t => t.completed
-    ).length;
-
-
-  const active =
-    total - completed;
-
-
-  const rate =
-    total === 0
-      ? 0
-      : Math.round(
-          (completed / total) * 100
-        );
-
-
-  let average=0;
-
-
-  if(nexusData.goals.length){
-
-    average =
-      Math.round(
-
-        nexusData.goals.reduce(
-          (sum,g) =>
-            sum +
-            Number(
-              g.progress || 0
-            ),
-          0
-        ) /
-        nexusData.goals.length
-
-      );
-
-  }
-
-
-  document.getElementById(
-    "completionRate"
-  ).innerText =
-    rate + "%";
-
-
-  document.getElementById(
-    "activeTasks"
-  ).innerText =
-    active;
-
-
-  document.getElementById(
-    "analyticsNotes"
-  ).innerText =
-    nexusData.notes.length;
-
-
-  document.getElementById(
-    "goalAverage"
-  ).innerText =
-    average + "%";
-
-
-  let analysis;
-
-
-  if(total===0){
-
-    analysis =
-      "NEXUS has insufficient mission data. Add tasks and goals to begin analysis.";
-
-  }else if(rate>=80){
-
-    analysis =
-      "Excellent execution rate, Commander. NEXUS is impressed. Try not to let it get to your head.";
-
-  }else if(rate>=50){
-
-    analysis =
-      "Moderate progress detected. You're moving, but NEXUS recommends increasing consistency.";
-
-  }else{
-
-    analysis =
-      "Low completion rate detected. No panic, Commander. Select one task and finish it.";
-
-  }
-
-
-  document.getElementById(
-    "analysisText"
-  ).innerText =
-    analysis;
-
-}
-
-
-/* =========================
+/* =====================================================
    SETTINGS
-========================= */
+===================================================== */
 
+function changeOperator(){
 
-function saveSettings(){
+  const current =
+    NEXUS.operator || "";
 
   const name =
-    document.getElementById(
-      "settingsName"
-    ).value.trim();
+    prompt(
+      "Enter your new operator name:",
+      current
+    );
 
+  if(name === null) return;
 
-  if(!name)
+  const cleaned =
+    name.trim();
+
+  if(cleaned.length < 2){
+
+    alert(
+      "Operator name must contain at least 2 characters."
+    );
+
     return;
 
+  }
 
-  nexusData.name =
-    name;
+  NEXUS.operator =
+    cleaned;
 
-
-  document.getElementById(
-    "sidebarName"
-  ).innerText =
-    name.toUpperCase() +
-    " // COMMANDER";
-
-
-  addLog(
-    "OPERATOR NAME UPDATED TO " +
-    name.toUpperCase()
+  localStorage.setItem(
+    "nexus_operator",
+    cleaned
   );
 
+  updateOperatorUI();
 
-  updateAll();
+  addLog(
+    "Operator identity updated."
+  );
 
 }
 
 
-function exportData(){
+function resetNexus(){
 
-  const data =
-    JSON.stringify(
-      nexusData,
-      null,
-      2
-    );
-
-
-  const blob =
-    new Blob(
-      [data],
-      {
-        type:
-          "application/json"
-      }
-    );
-
-
-  const url =
-    URL.createObjectURL(
-      blob
-    );
-
-
-  const a =
-    document.createElement(
-      "a"
-    );
-
-
-  a.href =
-    url;
-
-
-  a.download =
-    "nexus-data.json";
-
-
-  document.body.appendChild(
-    a
-  );
-
-
-  a.click();
-
-
-  a.remove();
-
-
-  URL.revokeObjectURL(
-    url
-  );
-
-
-  addLog(
-    "NEXUS DATA EXPORTED."
-  );
-
-
-  saveData();
-
-}
-
-
-function clearAllData(){
-
-  const confirmation =
+  const confirmed =
     confirm(
-      "RESET NEXUS?\n\nALL LOCAL NEXUS DATA WILL BE DELETED."
+      "WARNING: This will delete NEXUS local data. Continue?"
     );
 
-
-  if(!confirmation)
-    return;
-
+  if(!confirmed) return;
 
   localStorage.removeItem(
-    STORAGE_KEY
+    "nexus_operator"
   );
-
 
   localStorage.removeItem(
-    "nexusData"
+    "nexus_tasks"
   );
 
+  localStorage.removeItem(
+    "nexus_notes"
+  );
+
+  localStorage.removeItem(
+    "nexus_goals"
+  );
+
+  localStorage.removeItem(
+    "nexus_logs"
+  );
 
   location.reload();
 
 }
 
 
-/* =========================
-   MASTER UPDATE SYSTEM
-========================= */
+/* =====================================================
+   UTILITY
+===================================================== */
 
-function updateAll(){
+function setText(id,value){
 
-  normalizeData();
+  const element =
+    document.getElementById(id);
 
-  saveData();
+  if(element){
 
-  updateDashboard();
+    element.textContent =
+      value;
 
-  updateAnalytics();
+  }
+
+}
+
+
+function escapeHTML(value){
+
+  return String(value)
+
+    .replaceAll("&","&amp;")
+
+    .replaceAll("<","&lt;")
+
+    .replaceAll(">","&gt;")
+
+    .replaceAll('"',"&quot;")
+
+    .replaceAll("'","&#039;");
+
+}
+
+
+/* =====================================================
+   RENDER EVERYTHING
+===================================================== */
+
+function renderAll(){
+
+  updateOperatorUI();
 
   renderTasks();
 
@@ -3527,45 +3396,32 @@ function updateAll(){
 
   renderGoals();
 
+  updateStats();
+
+  renderAnalytics();
+
   renderLogs();
 
-}
-
-
-/* =========================
-   CLOCK
-========================= */
-
-function updateClock(){
-
-  const clock =
-    document.getElementById(
-      "clock"
-    );
-
-
-  if(clock)
-    clock.innerText =
-      new Date().toLocaleTimeString();
+  renderLatestActivity();
 
 }
 
 
-/* =========================
-   START NEXUS
-========================= */
+/* =====================================================
+   NEXUS BOOT LOG
+===================================================== */
 
-loadData();
+if(!NEXUS.logs.length){
 
-updateClock();
+  NEXUS.logs.push(
+    `[${new Date().toLocaleString()}] NEXUS boot sequence ready.`
+  );
 
-setInterval(
-  updateClock,
-  1000
-);
+  saveData();
+
+}
 
 </script>
 
 </body>
 </html>
-````
