@@ -1,13 +1,17 @@
 {
   "name": "nexus",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "NEXUS AI Command Center",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "nexus",
+    "ai",
+    "command-center"
+  ],
+  "author": "Joel",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
