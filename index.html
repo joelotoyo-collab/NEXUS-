@@ -1,672 +1,1287 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
 <title>NEXUS // AI COMMAND CENTER</title>
 
 <style>
+
+/* =====================================================
+   CORE
+===================================================== */
+
 :root{
+
   --green:#00ff88;
   --bg:#020504;
   --panel:#07100b;
+  --panel2:#050c08;
   --border:#123d27;
   --text:#f5f7f6;
   --muted:#b8c5be;
+  --dim:#718278;
   --danger:#ff7070;
+
 }
 
 *{
+
   box-sizing:border-box;
   margin:0;
   padding:0;
+
+}
+
+html{
+
+  scroll-behavior:smooth;
+
 }
 
 body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:Consolas,"Courier New",monospace;
+
   min-height:100vh;
+
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(0,255,136,.04),
+      transparent 35%
+    ),
+    var(--bg);
+
+  color:var(--text);
+
+  font-family:
+    Consolas,
+    "Courier New",
+    monospace;
+
 }
 
-button,input,textarea{
+button,
+input,
+textarea{
+
   font:inherit;
+
 }
 
 button{
+
   transition:.2s;
+
 }
 
 button:active{
+
   transform:scale(.98);
+
 }
 
 button:disabled{
+
   opacity:.55;
   cursor:not-allowed;
+
 }
 
-/* =========================
+
+/* =====================================================
    AUTH
-========================= */
+===================================================== */
 
 #authScreen{
+
   min-height:100vh;
+
   display:flex;
+
   align-items:center;
+
   justify-content:center;
+
   padding:20px;
+
   background:
-    radial-gradient(circle at 50% 25%,rgba(0,255,136,.12),transparent 35%),
-    linear-gradient(135deg,#020504,#06150c);
+    radial-gradient(
+      circle at 50% 25%,
+      rgba(0,255,136,.12),
+      transparent 35%
+    ),
+    linear-gradient(
+      135deg,
+      #020504,
+      #06150c
+    );
+
 }
 
 .auth-box{
+
   width:100%;
   max-width:440px;
+
   padding:36px;
+
   border:1px solid var(--green);
-  background:rgba(2,8,5,.95);
-  box-shadow:0 0 40px rgba(0,255,136,.12);
+
+  background:
+    rgba(2,8,5,.96);
+
+  box-shadow:
+    0 0 40px rgba(0,255,136,.12);
+
 }
 
 .auth-icon{
+
   width:92px;
   height:92px;
-  margin:0 auto 18px;
+
+  margin:
+    0 auto 18px;
+
   display:flex;
+
   align-items:center;
   justify-content:center;
-  border:1px solid rgba(0,255,136,.65);
+
+  border:
+    1px solid
+    rgba(0,255,136,.65);
+
   border-radius:24px;
+
   background:
-    radial-gradient(circle,rgba(0,255,136,.12),transparent 65%),
+    radial-gradient(
+      circle,
+      rgba(0,255,136,.12),
+      transparent 65%
+    ),
     #020604;
+
   box-shadow:
-    0 0 28px rgba(0,255,136,.16),
-    inset 0 0 20px rgba(0,255,136,.06);
+    0 0 28px
+    rgba(0,255,136,.16),
+
+    inset 0 0 20px
+    rgba(0,255,136,.06);
+
 }
 
 .auth-icon svg{
+
   width:68px;
   height:68px;
-  filter:drop-shadow(0 0 7px rgba(0,255,136,.45));
+
+  filter:
+    drop-shadow(
+      0 0 7px
+      rgba(0,255,136,.45)
+    );
+
 }
 
 .auth-logo{
+
   color:var(--text);
+
   text-align:center;
+
   font-size:32px;
+
   letter-spacing:9px;
+
   margin-bottom:12px;
-  text-shadow:0 0 14px rgba(0,255,136,.25);
+
+  text-shadow:
+    0 0 14px
+    rgba(0,255,136,.25);
+
 }
 
 .auth-subtitle{
+
   text-align:center;
+
   color:var(--muted);
+
   font-size:11px;
+
   margin-bottom:28px;
+
 }
 
 .input-group{
+
   margin-bottom:15px;
+
 }
 
 label{
+
   display:block;
+
   color:var(--green);
+
   font-size:11px;
+
   margin-bottom:7px;
+
   letter-spacing:1px;
+
 }
 
-input,textarea{
+input{
+
   width:100%;
+
   background:#020604;
+
   color:var(--text);
-  border:1px solid var(--border);
+
+  border:
+    1px solid
+    var(--border);
+
   outline:none;
+
   padding:12px;
+
 }
 
-input::placeholder,
-textarea::placeholder{
+input::placeholder{
+
   color:#6f8177;
+
 }
 
-input:focus,
-textarea:focus{
+input:focus{
+
   border-color:var(--green);
-  box-shadow:0 0 12px rgba(0,255,136,.1);
+
+  box-shadow:
+    0 0 12px
+    rgba(0,255,136,.1);
+
 }
 
 .primary-btn{
+
   width:100%;
+
   padding:13px;
-  border:1px solid var(--green);
+
+  border:
+    1px solid
+    var(--green);
+
   background:var(--green);
+
   color:#00170b;
+
   font-weight:bold;
+
   letter-spacing:1px;
+
   cursor:pointer;
+
 }
 
 .primary-btn:hover{
-  box-shadow:0 0 20px rgba(0,255,136,.25);
+
+  box-shadow:
+    0 0 20px
+    rgba(0,255,136,.25);
+
 }
 
 .error-text{
+
   color:var(--danger);
+
   font-size:11px;
+
   margin-top:12px;
+
   text-align:center;
+
   min-height:14px;
+
 }
 
-/* =========================
+
+/* =====================================================
    APP
-========================= */
+===================================================== */
 
 #app{
+
   display:none;
+
   min-height:100vh;
+
 }
 
 .app-shell{
+
   min-height:100vh;
+
   display:flex;
+
 }
 
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
 .sidebar{
+
   width:250px;
+
   flex-shrink:0;
+
   background:#030806;
-  border-right:1px solid var(--border);
+
+  border-right:
+    1px solid
+    var(--border);
+
   min-height:100vh;
+
   padding:22px 14px;
+
   position:sticky;
+
   top:0;
+
   height:100vh;
+
 }
 
 .sidebar-logo{
+
   color:var(--green);
+
   font-size:22px;
+
   letter-spacing:5px;
+
   text-align:center;
+
   margin-bottom:4px;
-  text-shadow:0 0 12px rgba(0,255,136,.35);
+
+  text-shadow:
+    0 0 12px
+    rgba(0,255,136,.35);
+
 }
 
 .sidebar-version{
+
   color:#61756a;
+
   text-align:center;
+
   font-size:9px;
+
   margin-bottom:24px;
+
 }
 
 .operator-card{
-  border:1px solid var(--border);
+
+  border:
+    1px solid
+    var(--border);
+
   background:#06100a;
+
   padding:13px;
+
   margin-bottom:18px;
+
 }
 
 .operator-label{
+
   color:#6d8176;
+
   font-size:9px;
+
   margin-bottom:5px;
+
 }
 
 .operator-name{
+
   color:var(--text);
+
   font-size:12px;
+
   overflow:hidden;
+
   text-overflow:ellipsis;
+
   white-space:nowrap;
+
 }
 
 .nav{
+
   display:flex;
+
   flex-direction:column;
+
   gap:5px;
+
 }
 
 .nav-btn{
+
   width:100%;
+
   padding:11px 12px;
-  border:1px solid transparent;
+
+  border:
+    1px solid
+    transparent;
+
   background:transparent;
+
   color:var(--muted);
+
   text-align:left;
+
   font-size:11px;
+
   cursor:pointer;
+
 }
 
 .nav-btn:hover{
+
   border-color:var(--border);
+
   background:#06100a;
+
   color:var(--text);
+
 }
 
 .nav-btn.active{
+
   border-color:var(--green);
-  background:rgba(0,255,136,.06);
+
+  background:
+    rgba(0,255,136,.06);
+
   color:var(--green);
+
 }
 
 .sidebar-footer{
+
   position:absolute;
+
   bottom:20px;
+
   left:14px;
+
   right:14px;
+
   color:#52645a;
+
   font-size:9px;
+
   text-align:center;
+
 }
 
-/* MAIN */
+
+/* =====================================================
+   MAIN
+===================================================== */
 
 .main{
+
   flex:1;
+
   min-width:0;
+
   padding:22px;
+
 }
 
 .topbar{
+
   display:flex;
+
   align-items:center;
+
   justify-content:space-between;
+
   gap:15px;
+
   margin-bottom:22px;
+
   padding-bottom:15px;
-  border-bottom:1px solid var(--border);
+
+  border-bottom:
+    1px solid
+    var(--border);
+
 }
 
 .page-title{
+
   color:var(--text);
+
   font-size:18px;
+
   letter-spacing:2px;
+
 }
 
 .page-subtitle{
+
   color:#718278;
+
   font-size:9px;
+
   margin-top:5px;
+
 }
 
 .clock{
+
   color:var(--green);
+
   font-size:11px;
+
   white-space:nowrap;
+
 }
 
-/* PANELS */
+
+/* =====================================================
+   PANELS
+===================================================== */
 
 .panel{
+
   background:var(--panel);
-  border:1px solid var(--border);
+
+  border:
+    1px solid
+    var(--border);
+
   padding:16px;
-  box-shadow:0 0 20px rgba(0,255,136,.025);
+
+  box-shadow:
+    0 0 20px
+    rgba(0,255,136,.025);
+
 }
 
 .panel-title{
+
   color:var(--green);
+
   font-size:11px;
+
   letter-spacing:1px;
+
   margin-bottom:13px;
+
 }
 
 .panel-text{
+
   color:var(--text);
+
   font-size:12px;
+
   line-height:1.7;
+
 }
 
-/* GRID */
+
+/* =====================================================
+   GRID
+===================================================== */
 
 .grid{
+
   display:grid;
+
   gap:14px;
+
 }
 
 .grid-2{
-  grid-template-columns:repeat(2,minmax(0,1fr));
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0,1fr)
+    );
+
 }
 
 .grid-3{
-  grid-template-columns:repeat(3,minmax(0,1fr));
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0,1fr)
+    );
+
 }
 
 .grid-4{
-  grid-template-columns:repeat(4,minmax(0,1fr));
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(0,1fr)
+    );
+
 }
 
-/* STATS */
+
+/* =====================================================
+   STATS
+===================================================== */
 
 .stat-card{
+
   background:var(--panel);
-  border:1px solid var(--border);
+
+  border:
+    1px solid
+    var(--border);
+
   padding:16px;
+
 }
 
 .stat-label{
+
   color:#718278;
+
   font-size:9px;
+
   letter-spacing:1px;
+
 }
 
 .stat-value{
+
   color:var(--text);
+
   font-size:25px;
+
   margin-top:7px;
+
 }
 
 .stat-value.green{
+
   color:var(--green);
+
 }
 
-/* DASHBOARD */
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
 
 .welcome{
+
   padding:20px;
-  border:1px solid var(--border);
+
+  border:
+    1px solid
+    var(--border);
+
   background:
-    radial-gradient(circle at 90% 20%,rgba(0,255,136,.07),transparent 30%),
+    radial-gradient(
+      circle at 90% 20%,
+      rgba(0,255,136,.07),
+      transparent 30%
+    ),
     var(--panel);
+
   margin-bottom:14px;
+
 }
 
 .welcome h2{
+
   color:var(--text);
+
   font-size:18px;
+
   margin-bottom:8px;
+
 }
 
 .welcome p{
+
   color:var(--muted);
+
   font-size:11px;
+
   line-height:1.7;
+
 }
 
 .reminder{
+
   margin-top:13px;
+
   padding:11px;
-  border-left:2px solid var(--green);
-  background:rgba(0,255,136,.035);
+
+  border-left:
+    2px solid
+    var(--green);
+
+  background:
+    rgba(0,255,136,.035);
+
   color:var(--text);
+
   font-size:10px;
+
 }
 
 .activity-box{
+
   color:var(--muted);
+
   font-size:10px;
+
   line-height:1.9;
+
   max-height:180px;
+
   overflow:auto;
+
+  white-space:pre-wrap;
+
 }
 
-/* AI */
+
+/* =====================================================
+   AI
+===================================================== */
 
 .ai-layout{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) 250px;
-  gap:14px;
-}
 
-.ai-terminal{
-  min-width:0;
+  display:grid;
+
+  grid-template-columns:
+    minmax(0,1fr)
+    250px;
+
+  gap:14px;
+
 }
 
 .chat-box{
+
   height:430px;
+
   overflow-y:auto;
+
   background:#020604;
-  border:1px solid var(--border);
+
+  border:
+    1px solid
+    var(--border);
+
   padding:14px;
+
   scroll-behavior:smooth;
+
 }
 
 .message{
+
   padding:9px 11px;
+
   margin-bottom:9px;
+
   border-left:2px solid;
+
   white-space:pre-wrap;
+
   word-break:break-word;
+
   font-size:11px;
+
   line-height:1.65;
+
 }
 
 .message.user{
+
   border-color:#7f8b85;
+
   color:var(--text);
-  background:rgba(255,255,255,.025);
+
+  background:
+    rgba(255,255,255,.025);
+
 }
 
 .message.nexus{
+
   border-color:var(--green);
+
   color:var(--text);
-  background:rgba(0,255,136,.035);
+
+  background:
+    rgba(0,255,136,.035);
+
+}
+
+.message.system{
+
+  border-color:#68776f;
+
+  color:var(--muted);
+
 }
 
 .ai-controls{
+
   display:flex;
+
   gap:8px;
+
   margin-top:10px;
+
 }
 
 .ai-controls input{
+
   flex:1;
+
 }
 
 .execute-btn{
+
   padding:12px 18px;
-  border:1px solid var(--green);
+
+  border:
+    1px solid
+    var(--green);
+
   background:var(--green);
+
   color:#00170b;
+
   font-weight:bold;
+
   cursor:pointer;
+
 }
 
 .voice-btn{
+
   padding:12px 15px;
-  border:1px solid var(--border);
+
+  border:
+    1px solid
+    var(--border);
+
   background:#06100a;
+
   color:var(--text);
+
   cursor:pointer;
+
 }
 
 .voice-btn:hover{
+
   border-color:var(--green);
+
 }
 
 .voice-btn.listening{
+
   border-color:var(--danger);
+
   color:var(--danger);
+
 }
 
 .voice-status{
+
   color:#6f8177;
+
   font-size:9px;
+
   margin-top:8px;
+
 }
 
 .command-list{
+
   line-height:1.9;
+
 }
 
 .command-list div{
+
   color:var(--muted);
+
   font-size:10px;
+
 }
 
 .command-list span{
+
   color:var(--green);
+
 }
 
-/* TASKS / NOTES / GOALS */
+
+/* =====================================================
+   TASKS NOTES GOALS
+===================================================== */
 
 .task-input-row,
 .note-input-row,
 .goal-input-row{
+
   display:flex;
+
   gap:8px;
+
   margin-bottom:14px;
+
 }
 
 .task-input-row input,
 .note-input-row input,
 .goal-input-row input{
+
   flex:1;
+
 }
 
 .action-btn{
-  border:1px solid var(--border);
+
+  border:
+    1px solid
+    var(--border);
+
   background:#06100a;
+
   color:var(--text);
+
   padding:9px 11px;
+
   font-size:10px;
+
   cursor:pointer;
+
 }
 
 .action-btn:hover{
+
   border-color:var(--green);
+
   color:var(--green);
+
 }
 
 .task-item{
+
   display:flex;
+
   align-items:center;
+
   gap:10px;
+
   padding:11px;
-  border:1px solid var(--border);
+
+  border:
+    1px solid
+    var(--border);
+
   margin-bottom:8px;
+
   background:#050c08;
+
 }
 
 .task-check{
+
   width:17px;
+
   height:17px;
+
   accent-color:var(--green);
+
   flex-shrink:0;
+
 }
 
 .task-text{
+
   flex:1;
+
   color:var(--text);
+
   font-size:11px;
+
   line-height:1.5;
+
 }
 
 .task-item.completed .task-text{
+
   color:#68776f;
+
   text-decoration:line-through;
+
 }
 
 .note-card,
 .goal-card{
-  border:1px solid var(--border);
+
+  border:
+    1px solid
+    var(--border);
+
   background:#050c08;
+
   padding:13px;
+
   margin-bottom:9px;
+
 }
 
 .note-title,
 .goal-title{
+
   color:var(--text);
+
   font-size:12px;
+
   margin-bottom:7px;
+
 }
 
 .note-body{
+
   color:var(--muted);
+
   font-size:10px;
+
   line-height:1.7;
+
 }
 
 .goal-progress{
+
   width:100%;
+
   height:7px;
+
   background:#020604;
-  border:1px solid var(--border);
+
+  border:
+    1px solid
+    var(--border);
+
   margin-top:10px;
+
   overflow:hidden;
+
 }
 
 .goal-progress div{
+
   height:100%;
+
   background:var(--green);
+
 }
 
 .goal-controls{
+
   display:flex;
+
   gap:7px;
+
   margin-top:10px;
+
 }
 
-/* LOGS */
+
+/* =====================================================
+   ANALYTICS
+===================================================== */
+
+.analytics-number{
+
+  color:var(--green);
+
+  font-size:25px;
+
+  margin-bottom:5px;
+
+}
+
+.analytics-label{
+
+  color:#718278;
+
+  font-size:9px;
+
+  letter-spacing:1px;
+
+}
+
+.analysis{
+
+  color:var(--muted);
+
+  font-size:10px;
+
+  line-height:1.8;
+
+}
+
+
+/* =====================================================
+   LOGS
+===================================================== */
 
 .logs-box{
+
   max-height:500px;
+
   overflow:auto;
+
   color:var(--muted);
+
   font-size:10px;
+
   line-height:1.9;
+
   white-space:pre-wrap;
+
 }
 
-/* SETTINGS */
+
+/* =====================================================
+   SETTINGS
+===================================================== */
 
 .settings-section{
+
   margin-bottom:20px;
+
 }
 
 .settings-section h3{
+
   color:var(--green);
+
   font-size:11px;
+
   margin-bottom:12px;
+
   letter-spacing:1px;
+
 }
 
 .settings-row{
+
   display:flex;
+
   align-items:center;
+
   justify-content:space-between;
+
   gap:15px;
+
   padding:12px 0;
-  border-bottom:1px solid rgba(18,61,39,.6);
+
+  border-bottom:
+    1px solid
+    rgba(18,61,39,.6);
+
 }
 
 .settings-label{
+
   color:var(--text);
+
   font-size:11px;
+
 }
 
 .settings-description{
+
   color:#718278;
+
   font-size:9px;
+
   margin-top:4px;
+
 }
 
-/* MOBILE */
+
+/* =====================================================
+   MOBILE
+===================================================== */
 
 .mobile-nav{
+
   display:none;
+
 }
 
 @media(max-width:900px){
 
   .sidebar{
+
     width:210px;
+
   }
 
   .ai-layout{
+
     grid-template-columns:1fr;
+
   }
 
   .grid-4{
-    grid-template-columns:repeat(2,minmax(0,1fr));
+
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0,1fr)
+      );
+
   }
 
 }
@@ -674,112 +1289,175 @@ textarea:focus{
 @media(max-width:700px){
 
   .app-shell{
+
     display:block;
+
   }
 
   .sidebar{
+
     display:none;
+
   }
 
   .main{
+
     padding:14px;
+
     padding-bottom:78px;
+
   }
 
   .mobile-nav{
+
     position:fixed;
+
     display:flex;
+
     z-index:100;
+
     left:0;
+
     right:0;
+
     bottom:0;
+
     height:64px;
+
     background:#030806;
-    border-top:1px solid var(--border);
+
+    border-top:
+      1px solid
+      var(--border);
+
     justify-content:space-around;
+
     align-items:center;
+
   }
 
   .mobile-nav button{
+
     border:0;
+
     background:transparent;
+
     color:#718278;
+
     font-size:9px;
+
     padding:8px;
+
   }
 
   .mobile-nav button.active{
+
     color:var(--green);
+
   }
 
   .grid-2,
   .grid-3,
   .grid-4{
+
     grid-template-columns:1fr;
+
   }
 
   .topbar{
+
     align-items:flex-start;
+
   }
 
   .page-title{
+
     font-size:15px;
+
   }
 
   .clock{
+
     font-size:9px;
+
   }
 
   .auth-box{
+
     padding:26px 20px;
+
   }
 
   .auth-logo{
+
     font-size:27px;
+
     letter-spacing:6px;
+
   }
 
   .auth-icon{
+
     width:78px;
+
     height:78px;
+
     border-radius:21px;
+
   }
 
   .auth-icon svg{
+
     width:58px;
+
     height:58px;
+
   }
 
   .ai-controls{
+
     flex-wrap:wrap;
+
   }
 
   .ai-controls input{
+
     flex-basis:100%;
+
   }
 
   .execute-btn,
   .voice-btn{
+
     flex:1;
+
   }
 
   .task-input-row,
   .note-input-row,
   .goal-input-row{
+
     flex-wrap:wrap;
+
   }
 
   .task-input-row input,
   .note-input-row input,
   .goal-input-row input{
+
     flex-basis:100%;
+
   }
 
 }
+
 </style>
+
 </head>
 
+
 <body>
+
 
 <!-- =====================================================
      AUTH SCREEN
@@ -789,11 +1467,16 @@ textarea:focus{
 
   <div class="auth-box">
 
-    <!-- YOUR ORIGINAL ICON — UNCHANGED -->
-    <div class="auth-icon" aria-label="NEXUS icon">
+    <div
+      class="auth-icon"
+      aria-label="NEXUS icon"
+    >
 
-      <svg viewBox="0 0 100 100" fill="none"
-           xmlns="http://www.w3.org/2000/svg">
+      <svg
+        viewBox="0 0 100 100"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
 
         <path
           d="M50 5L88 27V73L50 95L12 73V27L50 5Z"
@@ -829,13 +1512,16 @@ textarea:focus{
 
     </div>
 
+
     <div class="auth-logo">
       NEXUS
     </div>
 
+
     <div class="auth-subtitle">
       PERSONAL AI COMMAND CENTER // WELCOME, COMMANDER
     </div>
+
 
     <div class="input-group">
 
@@ -852,6 +1538,7 @@ textarea:focus{
 
     </div>
 
+
     <button
       id="initializeButton"
       class="primary-btn"
@@ -861,7 +1548,11 @@ textarea:focus{
       INITIALIZE NEXUS
     </button>
 
-    <div id="authError" class="error-text"></div>
+
+    <div
+      id="authError"
+      class="error-text"
+    ></div>
 
   </div>
 
@@ -869,12 +1560,13 @@ textarea:focus{
 
 
 <!-- =====================================================
-     APPLICATION
+     APP
 ===================================================== -->
 
 <div id="app">
 
   <div class="app-shell">
+
 
     <!-- SIDEBAR -->
 
@@ -888,69 +1580,91 @@ textarea:focus{
         AI COMMAND CENTER // V1.5
       </div>
 
+
       <div class="operator-card">
 
         <div class="operator-label">
           CURRENT OPERATOR
         </div>
 
-        <div id="sidebarName" class="operator-name">
+        <div
+          id="sidebarName"
+          class="operator-name"
+        >
           COMMANDER
         </div>
 
       </div>
 
+
       <nav class="nav">
 
-        <button class="nav-btn active"
-                data-page="dashboard"
-                onclick="showPage('dashboard',this)">
+        <button
+          class="nav-btn active"
+          data-page="dashboard"
+          onclick="showPage('dashboard')"
+        >
           ▸ DASHBOARD
         </button>
 
-        <button class="nav-btn"
-                data-page="ai"
-                onclick="showPage('ai',this)">
+        <button
+          class="nav-btn"
+          data-page="ai"
+          onclick="showPage('ai')"
+        >
           ▸ AI TERMINAL
         </button>
 
-        <button class="nav-btn"
-                data-page="tasks"
-                onclick="showPage('tasks',this)">
+        <button
+          class="nav-btn"
+          data-page="tasks"
+          onclick="showPage('tasks')"
+        >
           ▸ TASKS
         </button>
 
-        <button class="nav-btn"
-                data-page="notes"
-                onclick="showPage('notes',this)">
+        <button
+          class="nav-btn"
+          data-page="notes"
+          onclick="showPage('notes')"
+        >
           ▸ NOTES
         </button>
 
-        <button class="nav-btn"
-                data-page="goals"
-                onclick="showPage('goals',this)">
+        <button
+          class="nav-btn"
+          data-page="goals"
+          onclick="showPage('goals')"
+        >
           ▸ GOALS
         </button>
 
-        <button class="nav-btn"
-                data-page="analytics"
-                onclick="showPage('analytics',this)">
+        <button
+          class="nav-btn"
+          data-page="analytics"
+          onclick="showPage('analytics')"
+        >
           ▸ ANALYTICS
         </button>
 
-        <button class="nav-btn"
-                data-page="logs"
-                onclick="showPage('logs',this)">
+        <button
+          class="nav-btn"
+          data-page="logs"
+          onclick="showPage('logs')"
+        >
           ▸ SYSTEM LOGS
         </button>
 
-        <button class="nav-btn"
-                data-page="settings"
-                onclick="showPage('settings',this)">
+        <button
+          class="nav-btn"
+          data-page="settings"
+          onclick="showPage('settings')"
+        >
           ▸ SETTINGS
         </button>
 
       </nav>
+
 
       <div class="sidebar-footer">
         NEXUS // SYSTEM READY
@@ -963,21 +1677,32 @@ textarea:focus{
 
     <main class="main">
 
+
       <div class="topbar">
 
         <div>
 
-          <div id="pageTitle" class="page-title">
+          <div
+            id="pageTitle"
+            class="page-title"
+          >
             DASHBOARD
           </div>
 
-          <div id="pageSubtitle" class="page-subtitle">
+          <div
+            id="pageSubtitle"
+            class="page-subtitle"
+          >
             SYSTEM OVERVIEW
           </div>
 
         </div>
 
-        <div id="clock" class="clock">
+
+        <div
+          id="clock"
+          class="clock"
+        >
           00:00:00
         </div>
 
@@ -988,7 +1713,10 @@ textarea:focus{
            DASHBOARD
       ================================================== -->
 
-      <section id="page-dashboard" class="page">
+      <section
+        id="page-dashboard"
+        class="page"
+      >
 
         <div class="welcome">
 
@@ -1001,39 +1729,89 @@ textarea:focus{
             Your command center is standing by.
           </p>
 
-          <div id="reminderMessage" class="reminder">
+          <div
+            id="reminderMessage"
+            class="reminder"
+          >
             NEXUS awaiting mission data...
           </div>
 
         </div>
 
+
         <div class="grid grid-4">
 
           <div class="stat-card">
-            <div class="stat-label">TOTAL TASKS</div>
-            <div id="totalTasks" class="stat-value">0</div>
+
+            <div class="stat-label">
+              TOTAL TASKS
+            </div>
+
+            <div
+              id="totalTasks"
+              class="stat-value"
+            >
+              0
+            </div>
+
           </div>
 
-          <div class="stat-card">
-            <div class="stat-label">COMPLETED</div>
-            <div id="completedTasks" class="stat-value green">0</div>
-          </div>
 
           <div class="stat-card">
-            <div class="stat-label">NOTES</div>
-            <div id="totalNotes" class="stat-value">0</div>
+
+            <div class="stat-label">
+              COMPLETED
+            </div>
+
+            <div
+              id="completedTasks"
+              class="stat-value green"
+            >
+              0
+            </div>
+
           </div>
 
+
           <div class="stat-card">
-            <div class="stat-label">GOALS</div>
-            <div id="totalGoals" class="stat-value">0</div>
+
+            <div class="stat-label">
+              NOTES
+            </div>
+
+            <div
+              id="totalNotes"
+              class="stat-value"
+            >
+              0
+            </div>
+
+          </div>
+
+
+          <div class="stat-card">
+
+            <div class="stat-label">
+              GOALS
+            </div>
+
+            <div
+              id="totalGoals"
+              class="stat-value"
+            >
+              0
+            </div>
+
           </div>
 
         </div>
 
+
         <br>
 
+
         <div class="grid grid-2">
+
 
           <div class="panel">
 
@@ -1051,7 +1829,7 @@ textarea:focus{
               <br>
 
               DATABASE:
-              <span>LOCAL STORAGE</span>
+              LOCAL STORAGE
 
               <br>
 
@@ -1070,7 +1848,10 @@ textarea:focus{
               <br>
 
               AI INTERFACE:
-              <span id="aiStatusText" style="color:#00ff88">
+              <span
+                id="aiStatusText"
+                style="color:#ffcc66"
+              >
                 CHECKING...
               </span>
 
@@ -1078,17 +1859,22 @@ textarea:focus{
 
           </div>
 
+
           <div class="panel">
 
             <div class="panel-title">
               LATEST ACTIVITY
             </div>
 
-            <div id="latestActivity" class="activity-box">
+            <div
+              id="latestActivity"
+              class="activity-box"
+            >
               NEXUS awaiting activity...
             </div>
 
           </div>
+
 
         </div>
 
@@ -1099,11 +1885,16 @@ textarea:focus{
            AI TERMINAL
       ================================================== -->
 
-      <section id="page-ai" class="page" style="display:none">
+      <section
+        id="page-ai"
+        class="page"
+        style="display:none"
+      >
 
         <div class="ai-layout">
 
-          <div class="ai-terminal">
+
+          <div>
 
             <div class="panel">
 
@@ -1111,7 +1902,11 @@ textarea:focus{
                 NEXUS AI CORE
               </div>
 
-              <div id="chatBox" class="chat-box">
+
+              <div
+                id="chatBox"
+                class="chat-box"
+              >
 
                 <div class="message nexus">
                   NEXUS: Welcome back, Commander.
@@ -1122,10 +1917,11 @@ textarea:focus{
                 </div>
 
                 <div class="message nexus">
-                  Talk to me naturally — type your message or use the microphone.
+                  Type a message or use voice input.
                 </div>
 
               </div>
+
 
               <div class="ai-controls">
 
@@ -1136,6 +1932,7 @@ textarea:focus{
                   autocomplete="off"
                 >
 
+
                 <button
                   id="voiceButton"
                   class="voice-btn"
@@ -1144,6 +1941,7 @@ textarea:focus{
                 >
                   🎙️ VOICE
                 </button>
+
 
                 <button
                   id="executeButton"
@@ -1156,7 +1954,11 @@ textarea:focus{
 
               </div>
 
-              <div id="voiceStatus" class="voice-status">
+
+              <div
+                id="voiceStatus"
+                class="voice-status"
+              >
                 Voice system ready.
               </div>
 
@@ -1171,34 +1973,42 @@ textarea:focus{
               COMMANDS
             </div>
 
+
             <div class="command-list">
 
               <div>
-                <span>/help</span> — command list
+                <span>/help</span>
+                — command list
               </div>
 
               <div>
-                <span>/tasks</span> — task status
+                <span>/tasks</span>
+                — task status
               </div>
 
               <div>
-                <span>/notes</span> — note count
+                <span>/notes</span>
+                — note count
               </div>
 
               <div>
-                <span>/goals</span> — goal status
+                <span>/goals</span>
+                — goal status
               </div>
 
               <div>
-                <span>/status</span> — system status
+                <span>/status</span>
+                — system status
               </div>
 
               <div>
-                <span>/time</span> — current time
+                <span>/time</span>
+                — current time
               </div>
 
               <div>
-                <span>/clear</span> — clear terminal
+                <span>/clear</span>
+                — clear terminal
               </div>
 
               <br>
@@ -1211,6 +2021,7 @@ textarea:focus{
 
           </div>
 
+
         </div>
 
       </section>
@@ -1220,13 +2031,18 @@ textarea:focus{
            TASKS
       ================================================== -->
 
-      <section id="page-tasks" class="page" style="display:none">
+      <section
+        id="page-tasks"
+        class="page"
+        style="display:none"
+      >
 
         <div class="panel">
 
           <div class="panel-title">
             MISSION TASKS
           </div>
+
 
           <div class="task-input-row">
 
@@ -1245,6 +2061,7 @@ textarea:focus{
 
           </div>
 
+
           <div id="taskList"></div>
 
         </div>
@@ -1256,13 +2073,18 @@ textarea:focus{
            NOTES
       ================================================== -->
 
-      <section id="page-notes" class="page" style="display:none">
+      <section
+        id="page-notes"
+        class="page"
+        style="display:none"
+      >
 
         <div class="panel">
 
           <div class="panel-title">
             NEXUS NOTES
           </div>
+
 
           <div class="note-input-row">
 
@@ -1281,6 +2103,7 @@ textarea:focus{
 
           </div>
 
+
           <div id="noteList"></div>
 
         </div>
@@ -1292,13 +2115,18 @@ textarea:focus{
            GOALS
       ================================================== -->
 
-      <section id="page-goals" class="page" style="display:none">
+      <section
+        id="page-goals"
+        class="page"
+        style="display:none"
+      >
 
         <div class="panel">
 
           <div class="panel-title">
             OBJECTIVES
           </div>
+
 
           <div class="goal-input-row">
 
@@ -1317,6 +2145,7 @@ textarea:focus{
 
           </div>
 
+
           <div id="goalList"></div>
 
         </div>
@@ -1328,40 +2157,68 @@ textarea:focus{
            ANALYTICS
       ================================================== -->
 
-      <section id="page-analytics" class="page" style="display:none">
+      <section
+        id="page-analytics"
+        class="page"
+        style="display:none"
+      >
 
         <div class="grid grid-3">
 
+
           <div class="stat-card">
-            <div class="analytics-number" id="analyticsTasks">
+
+            <div
+              id="analyticsTasks"
+              class="analytics-number"
+            >
               0
             </div>
+
             <div class="analytics-label">
               TOTAL TASKS
             </div>
+
           </div>
 
+
           <div class="stat-card">
-            <div class="analytics-number" id="analyticsCompleted">
+
+            <div
+              id="analyticsCompleted"
+              class="analytics-number"
+            >
               0
             </div>
+
             <div class="analytics-label">
               COMPLETED TASKS
             </div>
+
           </div>
 
+
           <div class="stat-card">
-            <div class="analytics-number" id="analyticsCompletion">
+
+            <div
+              id="analyticsCompletion"
+              class="analytics-number"
+            >
               0%
             </div>
+
             <div class="analytics-label">
               COMPLETION RATE
             </div>
+
           </div>
+
 
         </div>
 
+
         <br>
+
 
         <div class="panel">
 
@@ -1369,7 +2226,10 @@ textarea:focus{
             SYSTEM ANALYSIS
           </div>
 
-          <div id="analyticsText" class="analysis">
+          <div
+            id="analyticsText"
+            class="analysis"
+          >
             NEXUS is collecting activity data...
           </div>
 
@@ -1382,7 +2242,11 @@ textarea:focus{
            LOGS
       ================================================== -->
 
-      <section id="page-logs" class="page" style="display:none">
+      <section
+        id="page-logs"
+        class="page"
+        style="display:none"
+      >
 
         <div class="panel">
 
@@ -1390,11 +2254,17 @@ textarea:focus{
             SYSTEM LOGS
           </div>
 
-          <div id="logsBox" class="logs-box">
+
+          <div
+            id="logsBox"
+            class="logs-box"
+          >
             NEXUS boot sequence initialized...
           </div>
 
+
           <br>
+
 
           <button
             class="action-btn"
@@ -1412,15 +2282,21 @@ textarea:focus{
            SETTINGS
       ================================================== -->
 
-      <section id="page-settings" class="page" style="display:none">
+      <section
+        id="page-settings"
+        class="page"
+        style="display:none"
+      >
 
         <div class="panel">
+
 
           <div class="settings-section">
 
             <h3>
               OPERATOR
             </h3>
+
 
             <div class="settings-row">
 
@@ -1435,6 +2311,7 @@ textarea:focus{
                 </div>
 
               </div>
+
 
               <button
                 class="action-btn"
@@ -1454,6 +2331,7 @@ textarea:focus{
               AI CORE
             </h3>
 
+
             <div class="settings-row">
 
               <div>
@@ -1467,6 +2345,7 @@ textarea:focus{
                 </div>
 
               </div>
+
 
               <button
                 class="action-btn"
@@ -1486,6 +2365,7 @@ textarea:focus{
               DATA
             </h3>
 
+
             <div class="settings-row">
 
               <div>
@@ -1500,6 +2380,7 @@ textarea:focus{
 
               </div>
 
+
               <button
                 class="action-btn"
                 onclick="resetNexus()"
@@ -1511,58 +2392,62 @@ textarea:focus{
 
           </div>
 
+
         </div>
 
       </section>
+
 
     </main>
 
   </div>
 
 
-  <!-- MOBILE NAV -->
+  <!-- =====================================================
+       MOBILE NAV
+  ====================================================== -->
 
   <div class="mobile-nav">
 
     <button
       class="active"
       data-page="dashboard"
-      onclick="showPage('dashboard',this)"
+      onclick="showPage('dashboard')"
     >
       HOME
     </button>
 
     <button
       data-page="ai"
-      onclick="showPage('ai',this)"
+      onclick="showPage('ai')"
     >
       AI
     </button>
 
     <button
       data-page="tasks"
-      onclick="showPage('tasks',this)"
+      onclick="showPage('tasks')"
     >
       TASKS
     </button>
 
     <button
       data-page="notes"
-      onclick="showPage('notes',this)"
+      onclick="showPage('notes')"
     >
       NOTES
     </button>
 
     <button
       data-page="goals"
-      onclick="showPage('goals',this)"
+      onclick="showPage('goals')"
     >
       GOALS
     </button>
 
     <button
       data-page="settings"
-      onclick="showPage('settings',this)"
+      onclick="showPage('settings')"
     >
       SET
     </button>
@@ -1575,25 +2460,39 @@ textarea:focus{
 <script>
 
 /* =====================================================
-   NEXUS CORE
+   NEXUS STATE
 ===================================================== */
 
 const NEXUS = {
 
   operator:
-    localStorage.getItem("nexus_operator") || "",
+    localStorage.getItem(
+      "nexus_operator"
+    ) || "",
 
   tasks:
-    JSON.parse(localStorage.getItem("nexus_tasks") || "[]"),
+    loadJSON(
+      "nexus_tasks",
+      []
+    ),
 
   notes:
-    JSON.parse(localStorage.getItem("nexus_notes") || "[]"),
+    loadJSON(
+      "nexus_notes",
+      []
+    ),
 
   goals:
-    JSON.parse(localStorage.getItem("nexus_goals") || "[]"),
+    loadJSON(
+      "nexus_goals",
+      []
+    ),
 
   logs:
-    JSON.parse(localStorage.getItem("nexus_logs") || "[]"),
+    loadJSON(
+      "nexus_logs",
+      []
+    ),
 
   history: []
 
@@ -1601,143 +2500,213 @@ const NEXUS = {
 
 
 /* =====================================================
-   DOM READY
+   SAFE LOCAL STORAGE
 ===================================================== */
 
-document.addEventListener("DOMContentLoaded", () => {
+function loadJSON(
+  key,
+  fallback
+){
 
-  /* ENTER KEY ON LOGIN */
+  try{
 
-  const operatorInput =
-    document.getElementById("operatorName");
+    const data =
+      localStorage.getItem(key);
 
-  if(operatorInput){
+    return data
+      ? JSON.parse(data)
+      : fallback;
 
-    operatorInput.addEventListener("keydown", event => {
+  }catch(error){
 
-      if(event.key === "Enter"){
-        enterNexus();
-      }
+    console.error(
+      "NEXUS storage error:",
+      error
+    );
 
-    });
-
-  }
-
-
-  /* ENTER KEY FOR AI */
-
-  const aiInput =
-    document.getElementById("aiInput");
-
-  if(aiInput){
-
-    aiInput.addEventListener("keydown", event => {
-
-      if(event.key === "Enter"){
-        event.preventDefault();
-        sendAI();
-      }
-
-    });
+    return fallback;
 
   }
 
-
-  /* ENTER KEY FOR TASK */
-
-  const taskInput =
-    document.getElementById("taskInput");
-
-  if(taskInput){
-
-    taskInput.addEventListener("keydown", event => {
-
-      if(event.key === "Enter"){
-        addTask();
-      }
-
-    });
-
-  }
-
-
-  /* ENTER KEY FOR NOTE */
-
-  const noteInput =
-    document.getElementById("noteInput");
-
-  if(noteInput){
-
-    noteInput.addEventListener("keydown", event => {
-
-      if(event.key === "Enter"){
-        addNote();
-      }
-
-    });
-
-  }
-
-
-  /* ENTER KEY FOR GOAL */
-
-  const goalInput =
-    document.getElementById("goalInput");
-
-  if(goalInput){
-
-    goalInput.addEventListener("keydown", event => {
-
-      if(event.key === "Enter"){
-        addGoal();
-      }
-
-    });
-
-  }
-
-
-  updateClock();
-  setInterval(updateClock,1000);
-
-  renderAll();
-
-  /*
-     IMPORTANT:
-     If an operator already exists,
-     restore the session automatically.
-  */
-
-  if(NEXUS.operator){
-
-    openNexus();
-
-  }
-
-});
+}
 
 
 /* =====================================================
-   LOGIN / INITIALIZE
+   SAVE DATA
+===================================================== */
+
+function saveData(){
+
+  localStorage.setItem(
+    "nexus_tasks",
+    JSON.stringify(
+      NEXUS.tasks
+    )
+  );
+
+  localStorage.setItem(
+    "nexus_notes",
+    JSON.stringify(
+      NEXUS.notes
+    )
+  );
+
+  localStorage.setItem(
+    "nexus_goals",
+    JSON.stringify(
+      NEXUS.goals
+    )
+  );
+
+  localStorage.setItem(
+    "nexus_logs",
+    JSON.stringify(
+      NEXUS.logs
+    )
+  );
+
+}
+
+
+/* =====================================================
+   DOM READY
+===================================================== */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    setupEnterKeys();
+
+    updateClock();
+
+    setInterval(
+      updateClock,
+      1000
+    );
+
+    if(!NEXUS.logs.length){
+
+      NEXUS.logs.push(
+        `[${new Date().toLocaleString()}] NEXUS boot sequence ready.`
+      );
+
+      saveData();
+
+    }
+
+    renderAll();
+
+
+    if(NEXUS.operator){
+
+      openNexus();
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   ENTER KEYS
+===================================================== */
+
+function setupEnterKeys(){
+
+  const mappings = [
+
+    [
+      "operatorName",
+      enterNexus
+    ],
+
+    [
+      "aiInput",
+      sendAI
+    ],
+
+    [
+      "taskInput",
+      addTask
+    ],
+
+    [
+      "noteInput",
+      addNote
+    ],
+
+    [
+      "goalInput",
+      addGoal
+    ]
+
+  ];
+
+
+  mappings.forEach(
+    ([id, callback]) => {
+
+      const element =
+        document.getElementById(id);
+
+      if(!element) return;
+
+      element.addEventListener(
+        "keydown",
+        event => {
+
+          if(
+            event.key === "Enter"
+          ){
+
+            event.preventDefault();
+
+            callback();
+
+          }
+
+        }
+      );
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   LOGIN
 ===================================================== */
 
 function enterNexus(){
 
   const input =
-    document.getElementById("operatorName");
+    document.getElementById(
+      "operatorName"
+    );
 
   const error =
-    document.getElementById("authError");
+    document.getElementById(
+      "authError"
+    );
 
   const button =
-    document.getElementById("initializeButton");
+    document.getElementById(
+      "initializeButton"
+    );
+
 
   if(!input) return;
+
 
   const name =
     input.value.trim();
 
-  error.textContent = "";
+
+  error.textContent =
+    "";
+
 
   if(!name){
 
@@ -1750,6 +2719,7 @@ function enterNexus(){
 
   }
 
+
   if(name.length < 2){
 
     error.textContent =
@@ -1761,41 +2731,45 @@ function enterNexus(){
 
   }
 
-  /*
-     Save operator locally.
-  */
 
-  NEXUS.operator = name;
+  NEXUS.operator =
+    name;
+
 
   localStorage.setItem(
     "nexus_operator",
     name
   );
 
-  /*
-     Prevent double clicks.
-  */
 
-  button.disabled = true;
-  button.textContent = "INITIALIZING...";
+  button.disabled =
+    true;
+
+  button.textContent =
+    "INITIALIZING...";
+
 
   addLog(
-    "Operator " + name + " initialized NEXUS."
+    "Operator " +
+    name +
+    " initialized NEXUS."
   );
 
-  /*
-     Open immediately.
-     No server request is required for login.
-  */
 
-  setTimeout(() => {
+  setTimeout(
+    () => {
 
-    openNexus();
+      openNexus();
 
-    button.disabled = false;
-    button.textContent = "INITIALIZE NEXUS";
+      button.disabled =
+        false;
 
-  },300);
+      button.textContent =
+        "INITIALIZE NEXUS";
+
+    },
+    250
+  );
 
 }
 
@@ -1807,17 +2781,32 @@ function enterNexus(){
 function openNexus(){
 
   const auth =
-    document.getElementById("authScreen");
+    document.getElementById(
+      "authScreen"
+    );
 
   const app =
-    document.getElementById("app");
+    document.getElementById(
+      "app"
+    );
 
-  if(!auth || !app) return;
 
-  auth.style.display = "none";
-  app.style.display = "block";
+  if(!auth || !app){
+
+    return;
+
+  }
+
+
+  auth.style.display =
+    "none";
+
+  app.style.display =
+    "block";
+
 
   updateOperatorUI();
+
   renderAll();
 
   checkAIConnection(false);
@@ -1832,32 +2821,33 @@ function openNexus(){
 function updateOperatorUI(){
 
   const name =
-    NEXUS.operator || "COMMANDER";
+    NEXUS.operator ||
+    "COMMANDER";
 
-  const sidebarName =
-    document.getElementById("sidebarName");
 
-  const statusOperator =
-    document.getElementById("statusOperator");
+  setText(
+    "sidebarName",
+    name
+  );
 
-  const welcome =
-    document.getElementById("welcomeMessage");
+  setText(
+    "statusOperator",
+    name
+  );
 
-  if(sidebarName)
-    sidebarName.textContent = name;
 
-  if(statusOperator)
-    statusOperator.textContent = name;
-
-  if(welcome)
-    welcome.textContent =
-      "Welcome, " + name + ".";
+  setText(
+    "welcomeMessage",
+    "Welcome, " +
+    name +
+    "."
+  );
 
 }
 
 
 /* =====================================================
-   PAGE NAVIGATION
+   NAVIGATION
 ===================================================== */
 
 const pageInfo = {
@@ -1905,59 +2895,77 @@ const pageInfo = {
 };
 
 
-function showPage(page, clickedButton){
+function showPage(page){
 
-  document.querySelectorAll(".page")
+  document
+    .querySelectorAll(".page")
     .forEach(section => {
 
       section.style.display =
-        section.id === "page-" + page
+        section.id ===
+        "page-" + page
           ? "block"
           : "none";
 
     });
 
 
-  document.querySelectorAll(
-    ".nav-btn,.mobile-nav button"
-  ).forEach(button => {
+  document
+    .querySelectorAll(
+      ".nav-btn,.mobile-nav button"
+    )
+    .forEach(button => {
 
-    button.classList.remove("active");
+      button.classList.remove(
+        "active"
+      );
 
-  });
+    });
 
 
-  document.querySelectorAll(
-    `[data-page="${page}"]`
-  ).forEach(button => {
+  document
+    .querySelectorAll(
+      `[data-page="${page}"]`
+    )
+    .forEach(button => {
 
-    button.classList.add("active");
+      button.classList.add(
+        "active"
+      );
 
-  });
+    });
 
 
   const info =
     pageInfo[page];
 
+
   if(info){
 
-    document.getElementById(
-      "pageTitle"
-    ).textContent = info.title;
+    setText(
+      "pageTitle",
+      info.title
+    );
 
-    document.getElementById(
-      "pageSubtitle"
-    ).textContent = info.subtitle;
+    setText(
+      "pageSubtitle",
+      info.subtitle
+    );
 
   }
 
 
   if(page === "analytics"){
+
     renderAnalytics();
+
   }
 
+
   if(page === "logs"){
+
     renderLogs();
+
   }
 
 }
@@ -1970,15 +2978,15 @@ function showPage(page, clickedButton){
 function updateClock(){
 
   const clock =
-    document.getElementById("clock");
+    document.getElementById(
+      "clock"
+    );
 
   if(!clock) return;
 
-  const now =
-    new Date();
 
   clock.textContent =
-    now.toLocaleTimeString(
+    new Date().toLocaleTimeString(
       [],
       {
         hour:"2-digit",
@@ -1991,55 +2999,35 @@ function updateClock(){
 
 
 /* =====================================================
-   LOCAL STORAGE
-===================================================== */
-
-function saveData(){
-
-  localStorage.setItem(
-    "nexus_tasks",
-    JSON.stringify(NEXUS.tasks)
-  );
-
-  localStorage.setItem(
-    "nexus_notes",
-    JSON.stringify(NEXUS.notes)
-  );
-
-  localStorage.setItem(
-    "nexus_goals",
-    JSON.stringify(NEXUS.goals)
-  );
-
-  localStorage.setItem(
-    "nexus_logs",
-    JSON.stringify(NEXUS.logs)
-  );
-
-}
-
-
-/* =====================================================
    LOGGING
 ===================================================== */
 
 function addLog(message){
 
-  const time =
-    new Date().toLocaleString();
-
   NEXUS.logs.unshift(
-    `[${time}] ${message}`
+
+    `[${new Date().toLocaleString()}] ${message}`
+
   );
 
-  if(NEXUS.logs.length > 200){
+
+  if(
+    NEXUS.logs.length > 200
+  ){
+
     NEXUS.logs =
-      NEXUS.logs.slice(0,200);
+      NEXUS.logs.slice(
+        0,
+        200
+      );
+
   }
+
 
   saveData();
 
   renderLogs();
+
   renderLatestActivity();
 
 }
@@ -2052,34 +3040,50 @@ function addLog(message){
 function addTask(){
 
   const input =
-    document.getElementById("taskInput");
+    document.getElementById(
+      "taskInput"
+    );
+
 
   const text =
     input.value.trim();
 
+
   if(!text) return;
+
 
   NEXUS.tasks.push({
 
-    id:Date.now(),
+    id:
+      Date.now(),
 
-    text:text,
+    text:
+      text,
 
-    completed:false,
+    completed:
+      false,
 
-    created:new Date().toISOString()
+    created:
+      new Date().toISOString()
 
   });
 
-  input.value = "";
+
+  input.value =
+    "";
+
 
   saveData();
 
+
   addLog(
-    "New task created: " + text
+    "New task created: " +
+    text
   );
 
+
   renderTasks();
+
   updateStats();
 
 }
@@ -2089,23 +3093,35 @@ function toggleTask(id){
 
   const task =
     NEXUS.tasks.find(
-      item => item.id === id
+      item =>
+        item.id === id
     );
 
+
   if(!task) return;
+
 
   task.completed =
     !task.completed;
 
+
   saveData();
 
+
   addLog(
+
     task.completed
-      ? "Task completed: " + task.text
-      : "Task reopened: " + task.text
+      ? "Task completed: " +
+        task.text
+
+      : "Task reopened: " +
+        task.text
+
   );
 
+
   renderTasks();
+
   updateStats();
 
 }
@@ -2115,25 +3131,33 @@ function deleteTask(id){
 
   const task =
     NEXUS.tasks.find(
-      item => item.id === id
+      item =>
+        item.id === id
     );
+
 
   NEXUS.tasks =
     NEXUS.tasks.filter(
-      item => item.id !== id
+      item =>
+        item.id !== id
     );
 
+
   saveData();
+
 
   if(task){
 
     addLog(
-      "Task deleted: " + task.text
+      "Task deleted: " +
+      task.text
     );
 
   }
 
+
   renderTasks();
+
   updateStats();
 
 }
@@ -2142,49 +3166,65 @@ function deleteTask(id){
 function renderTasks(){
 
   const list =
-    document.getElementById("taskList");
+    document.getElementById(
+      "taskList"
+    );
+
 
   if(!list) return;
 
+
   if(!NEXUS.tasks.length){
 
-    list.innerHTML =
-      `<div class="analysis">
+    list.innerHTML = `
+      <div class="analysis">
         No active missions. Add a task above.
-      </div>`;
+      </div>
+    `;
 
     return;
 
   }
 
+
   list.innerHTML =
-    NEXUS.tasks.map(task => `
+    NEXUS.tasks
+      .map(task => `
 
-      <div class="task-item ${
-        task.completed ? "completed" : ""
-      }">
-
-        <input
-          class="task-check"
-          type="checkbox"
-          ${task.completed ? "checked" : ""}
-          onchange="toggleTask(${task.id})"
+        <div
+          class="task-item ${
+            task.completed
+              ? "completed"
+              : ""
+          }"
         >
 
-        <div class="task-text">
-          ${escapeHTML(task.text)}
+          <input
+            class="task-check"
+            type="checkbox"
+            ${
+              task.completed
+                ? "checked"
+                : ""
+            }
+            onchange="toggleTask(${task.id})"
+          >
+
+          <div class="task-text">
+            ${escapeHTML(task.text)}
+          </div>
+
+          <button
+            class="action-btn"
+            onclick="deleteTask(${task.id})"
+          >
+            DELETE
+          </button>
+
         </div>
 
-        <button
-          class="action-btn"
-          onclick="deleteTask(${task.id})"
-        >
-          DELETE
-        </button>
-
-      </div>
-
-    `).join("");
+      `)
+      .join("");
 
 }
 
@@ -2196,32 +3236,46 @@ function renderTasks(){
 function addNote(){
 
   const input =
-    document.getElementById("noteInput");
+    document.getElementById(
+      "noteInput"
+    );
+
 
   const text =
     input.value.trim();
 
+
   if(!text) return;
+
 
   NEXUS.notes.unshift({
 
-    id:Date.now(),
+    id:
+      Date.now(),
 
-    text:text,
+    text:
+      text,
 
-    created:new Date().toISOString()
+    created:
+      new Date().toISOString()
 
   });
 
-  input.value = "";
+
+  input.value =
+    "";
+
 
   saveData();
+
 
   addLog(
     "New note saved."
   );
 
+
   renderNotes();
+
   updateStats();
 
 }
@@ -2231,16 +3285,21 @@ function deleteNote(id){
 
   NEXUS.notes =
     NEXUS.notes.filter(
-      note => note.id !== id
+      note =>
+        note.id !== id
     );
 
+
   saveData();
+
 
   addLog(
     "Note deleted."
   );
 
+
   renderNotes();
+
   updateStats();
 
 }
@@ -2249,46 +3308,61 @@ function deleteNote(id){
 function renderNotes(){
 
   const list =
-    document.getElementById("noteList");
+    document.getElementById(
+      "noteList"
+    );
+
 
   if(!list) return;
 
+
   if(!NEXUS.notes.length){
 
-    list.innerHTML =
-      `<div class="analysis">
+    list.innerHTML = `
+      <div class="analysis">
         No notes stored yet.
-      </div>`;
+      </div>
+    `;
 
     return;
 
   }
 
+
   list.innerHTML =
-    NEXUS.notes.map(note => `
+    NEXUS.notes
+      .map(note => `
 
-      <div class="note-card">
+        <div class="note-card">
 
-        <div class="note-title">
-          NOTE // ${new Date(note.created).toLocaleDateString()}
+          <div class="note-title">
+
+            NOTE //
+            ${
+              new Date(
+                note.created
+              ).toLocaleDateString()
+            }
+
+          </div>
+
+          <div class="note-body">
+            ${escapeHTML(note.text)}
+          </div>
+
+          <br>
+
+          <button
+            class="action-btn"
+            onclick="deleteNote(${note.id})"
+          >
+            DELETE
+          </button>
+
         </div>
 
-        <div class="note-body">
-          ${escapeHTML(note.text)}
-        </div>
-
-        <br>
-
-        <button
-          class="action-btn"
-          onclick="deleteNote(${note.id})"
-        >
-          DELETE
-        </button>
-
-      </div>
-
-    `).join("");
+      `)
+      .join("");
 
 }
 
@@ -2300,60 +3374,85 @@ function renderNotes(){
 function addGoal(){
 
   const input =
-    document.getElementById("goalInput");
+    document.getElementById(
+      "goalInput"
+    );
+
 
   const text =
     input.value.trim();
 
+
   if(!text) return;
+
 
   NEXUS.goals.push({
 
-    id:Date.now(),
+    id:
+      Date.now(),
 
-    text:text,
+    text:
+      text,
 
-    progress:0,
+    progress:
+      0,
 
-    created:new Date().toISOString()
+    created:
+      new Date().toISOString()
 
   });
 
-  input.value = "";
+
+  input.value =
+    "";
+
 
   saveData();
 
+
   addLog(
-    "New goal created: " + text
+    "New goal created: " +
+    text
   );
 
+
   renderGoals();
+
   updateStats();
 
 }
 
 
-function changeGoalProgress(id,amount){
+function changeGoalProgress(
+  id,
+  amount
+){
 
   const goal =
     NEXUS.goals.find(
-      item => item.id === id
+      item =>
+        item.id === id
     );
 
+
   if(!goal) return;
+
 
   goal.progress =
     Math.max(
       0,
       Math.min(
         100,
-        goal.progress + amount
+        goal.progress +
+        amount
       )
     );
+
 
   saveData();
 
   renderGoals();
+
   updateStats();
 
 }
@@ -2363,16 +3462,21 @@ function deleteGoal(id){
 
   NEXUS.goals =
     NEXUS.goals.filter(
-      goal => goal.id !== id
+      goal =>
+        goal.id !== id
     );
 
+
   saveData();
+
 
   addLog(
     "Goal deleted."
   );
 
+
   renderGoals();
+
   updateStats();
 
 }
@@ -2381,66 +3485,96 @@ function deleteGoal(id){
 function renderGoals(){
 
   const list =
-    document.getElementById("goalList");
+    document.getElementById(
+      "goalList"
+    );
+
 
   if(!list) return;
 
+
   if(!NEXUS.goals.length){
 
-    list.innerHTML =
-      `<div class="analysis">
+    list.innerHTML = `
+      <div class="analysis">
         No objectives registered.
-      </div>`;
+      </div>
+    `;
 
     return;
 
   }
 
+
   list.innerHTML =
-    NEXUS.goals.map(goal => `
+    NEXUS.goals
+      .map(goal => `
 
-      <div class="goal-card">
+        <div class="goal-card">
 
-        <div class="goal-title">
-          ${escapeHTML(goal.text)}
+          <div class="goal-title">
+            ${escapeHTML(goal.text)}
+          </div>
+
+          <div class="analysis">
+            PROGRESS:
+            ${goal.progress}%
+          </div>
+
+          <div class="goal-progress">
+
+            <div
+              style="
+                width:${goal.progress}%;
+              "
+            ></div>
+
+          </div>
+
+
+          <div class="goal-controls">
+
+            <button
+              class="action-btn"
+              onclick="
+                changeGoalProgress(
+                  ${goal.id},
+                  -10
+                )
+              "
+            >
+              -10
+            </button>
+
+            <button
+              class="action-btn"
+              onclick="
+                changeGoalProgress(
+                  ${goal.id},
+                  10
+                )
+              "
+            >
+              +10
+            </button>
+
+            <button
+              class="action-btn"
+              onclick="
+                deleteGoal(
+                  ${goal.id}
+                )
+              "
+            >
+              DELETE
+            </button>
+
+          </div>
+
         </div>
 
-        <div class="analysis">
-          PROGRESS: ${goal.progress}%
-        </div>
-
-        <div class="goal-progress">
-          <div style="width:${goal.progress}%"></div>
-        </div>
-
-        <div class="goal-controls">
-
-          <button
-            class="action-btn"
-            onclick="changeGoalProgress(${goal.id},-10)"
-          >
-            -10
-          </button>
-
-          <button
-            class="action-btn"
-            onclick="changeGoalProgress(${goal.id},10)"
-          >
-            +10
-          </button>
-
-          <button
-            class="action-btn"
-            onclick="deleteGoal(${goal.id})"
-          >
-            DELETE
-          </button>
-
-        </div>
-
-      </div>
-
-    `).join("");
+      `)
+      .join("");
 
 }
 
@@ -2454,13 +3588,17 @@ function updateStats(){
   const totalTasks =
     NEXUS.tasks.length;
 
+
   const completed =
     NEXUS.tasks.filter(
-      task => task.completed
+      task =>
+        task.completed
     ).length;
+
 
   const totalNotes =
     NEXUS.notes.length;
+
 
   const totalGoals =
     NEXUS.goals.length;
@@ -2501,9 +3639,12 @@ function updateStats(){
   const rate =
     totalTasks
       ? Math.round(
-          completed / totalTasks * 100
+          completed /
+          totalTasks *
+          100
         )
       : 0;
+
 
   setText(
     "analyticsCompletion",
@@ -2516,48 +3657,56 @@ function updateStats(){
       "reminderMessage"
     );
 
+
   if(reminder){
 
-    if(totalTasks === 0){
+    reminder.textContent =
+      totalTasks === 0
 
-      reminder.textContent =
-        "NEXUS awaiting mission data...";
+        ? "NEXUS awaiting mission data..."
 
-    }else{
-
-      reminder.textContent =
-        `${completed} of ${totalTasks} tasks completed.`;
-
-    }
+        : `${completed} of ${totalTasks} tasks completed.`;
 
   }
 
 }
 
 
+/* =====================================================
+   ANALYTICS
+===================================================== */
+
 function renderAnalytics(){
 
   const total =
     NEXUS.tasks.length;
 
+
   const completed =
     NEXUS.tasks.filter(
-      task => task.completed
+      task =>
+        task.completed
     ).length;
+
 
   const rate =
     total
       ? Math.round(
-          completed / total * 100
+          completed /
+          total *
+          100
         )
       : 0;
+
 
   const text =
     document.getElementById(
       "analyticsText"
     );
 
+
   if(!text) return;
+
 
   if(total === 0){
 
@@ -2567,6 +3716,7 @@ function renderAnalytics(){
     return;
 
   }
+
 
   text.textContent =
     `Operator performance: ${rate}% task completion rate. ` +
@@ -2587,7 +3737,9 @@ function renderLatestActivity(){
       "latestActivity"
     );
 
+
   if(!box) return;
+
 
   if(!NEXUS.logs.length){
 
@@ -2597,6 +3749,7 @@ function renderLatestActivity(){
     return;
 
   }
+
 
   box.textContent =
     NEXUS.logs
@@ -2617,30 +3770,36 @@ function renderLogs(){
       "logsBox"
     );
 
+
   if(!box) return;
 
-  if(!NEXUS.logs.length){
-
-    box.textContent =
-      "No system logs.";
-
-    return;
-
-  }
 
   box.textContent =
-    NEXUS.logs.join("\n");
+    NEXUS.logs.length
+
+      ? NEXUS.logs.join("\n")
+
+      : "No system logs.";
 
 }
 
 
 function clearLogs(){
 
-  if(!confirm(
-    "Clear all NEXUS system logs?"
-  )) return;
+  if(
+    !confirm(
+      "Clear all NEXUS system logs?"
+    )
+  ){
 
-  NEXUS.logs = [];
+    return;
+
+  }
+
+
+  NEXUS.logs =
+    [];
+
 
   saveData();
 
@@ -2650,13 +3809,15 @@ function clearLogs(){
 
 
 /* =====================================================
-   AI COMMANDS
+   LOCAL COMMANDS
 ===================================================== */
 
 function localCommand(command){
 
   const cmd =
-    command.trim().toLowerCase();
+    command
+      .trim()
+      .toLowerCase();
 
 
   if(cmd === "/help"){
@@ -2683,10 +3844,13 @@ You can also talk to NEXUS normally.
     const total =
       NEXUS.tasks.length;
 
+
     const completed =
       NEXUS.tasks.filter(
-        task => task.completed
+        task =>
+          task.completed
       ).length;
+
 
     return `
 TASK STATUS
@@ -2704,7 +3868,8 @@ Remaining: ${total - completed}
     return `
 NOTES
 
-Stored notes: ${NEXUS.notes.length}
+Stored notes:
+${NEXUS.notes.length}
 `;
 
   }
@@ -2718,13 +3883,16 @@ Stored notes: ${NEXUS.notes.length}
 
     }
 
+
     return `
 GOALS
 
-${NEXUS.goals.map(
-  goal =>
-    `• ${goal.text} — ${goal.progress}%`
-).join("\n")}
+${NEXUS.goals
+  .map(
+    goal =>
+      `• ${goal.text} — ${goal.progress}%`
+  )
+  .join("\n")}
 `;
 
   }
@@ -2735,11 +3903,23 @@ ${NEXUS.goals.map(
     return `
 NEXUS SYSTEM STATUS
 
-Operator: ${NEXUS.operator || "COMMANDER"}
-Core: ONLINE
-Local Storage: ONLINE
-Voice Interface: READY
-AI Endpoint: /api/chat
+Operator:
+${NEXUS.operator || "COMMANDER"}
+
+Core:
+ONLINE
+
+Local Storage:
+ONLINE
+
+Voice Interface:
+READY
+
+AI Endpoint:
+/api/chat
+
+AI Health:
+/api/health
 `;
 
   }
@@ -2758,9 +3938,19 @@ ${new Date().toLocaleString()}
 
   if(cmd === "/clear"){
 
-    document.getElementById(
-      "chatBox"
-    ).innerHTML = "";
+    const box =
+      document.getElementById(
+        "chatBox"
+      );
+
+
+    if(box){
+
+      box.innerHTML =
+        "";
+
+    }
+
 
     return null;
 
@@ -2773,7 +3963,7 @@ ${new Date().toLocaleString()}
 
 
 /* =====================================================
-   SEND AI MESSAGE
+   SEND AI
 ===================================================== */
 
 async function sendAI(){
@@ -2788,27 +3978,50 @@ async function sendAI(){
       "executeButton"
     );
 
-  if(!input) return;
+
+  if(!input || !button){
+
+    return;
+
+  }
+
 
   const message =
     input.value.trim();
 
-  if(!message) return;
+
+  if(!message){
+
+    return;
+
+  }
 
 
-  /* LOCAL COMMAND */
+  /* ---------------------------------------------
+     LOCAL COMMAND
+  --------------------------------------------- */
 
   const commandResult =
-    localCommand(message);
+    localCommand(
+      message
+    );
 
-  if(commandResult !== undefined){
+
+  if(
+    commandResult !==
+    undefined
+  ){
 
     addChatMessage(
       "user",
       message
     );
 
-    if(commandResult !== null){
+
+    if(
+      commandResult !==
+      null
+    ){
 
       addChatMessage(
         "nexus",
@@ -2817,62 +4030,84 @@ async function sendAI(){
 
     }
 
-    input.value = "";
+
+    input.value =
+      "";
+
 
     addLog(
-      "Local AI command executed: " +
+      "Local command executed: " +
       message
     );
+
 
     return;
 
   }
 
 
+  /* ---------------------------------------------
+     SHOW USER MESSAGE
+  --------------------------------------------- */
+
   addChatMessage(
     "user",
     message
   );
 
-  input.value = "";
 
-  button.disabled = true;
-  button.textContent = "CONNECTING...";
+  input.value =
+    "";
 
 
-  addChatMessage(
-    "nexus",
-    "NEXUS: Connecting to AI core..."
-  );
+  button.disabled =
+    true;
+
+  button.textContent =
+    "CONNECTING...";
+
+
+  const loadingId =
+    addChatMessage(
+      "nexus",
+      "Connecting to NEXUS AI core..."
+    );
 
 
   try{
+
 
     const response =
       await fetch(
         "/api/chat",
         {
-          method:"POST",
+
+          method:
+            "POST",
 
           headers:{
             "Content-Type":
               "application/json"
           },
 
-          body:JSON.stringify({
+          body:
+            JSON.stringify({
 
-            message:message,
+              message:
+                message,
 
-            history:
-              NEXUS.history.slice(-10)
+              history:
+                NEXUS.history
+                  .slice(-10)
 
-          })
+            })
 
         }
       );
 
 
-    let data;
+    let data = null;
+
 
     try{
 
@@ -2882,7 +4117,7 @@ async function sendAI(){
     }catch{
 
       throw new Error(
-        "Server returned an invalid response."
+        "The NEXUS server returned an invalid response."
       );
 
     }
@@ -2891,14 +4126,17 @@ async function sendAI(){
     if(!response.ok){
 
       throw new Error(
-        data.error ||
-        "AI server returned an error."
+        data?.error ||
+        `Server error (${response.status}).`
       );
 
     }
 
 
-    if(!data.reply){
+    if(
+      !data ||
+      !data.reply
+    ){
 
       throw new Error(
         "NEXUS received an empty AI response."
@@ -2907,13 +4145,10 @@ async function sendAI(){
     }
 
 
-    /*
-       Remove the temporary connection
-       message before displaying the
-       actual response.
-    */
+    removeChatMessage(
+      loadingId
+    );
 
-    removeLastNexusMessage();
 
     addChatMessage(
       "nexus",
@@ -2923,21 +4158,29 @@ async function sendAI(){
 
     NEXUS.history.push({
 
-      role:"user",
-      content:message
+      role:
+        "user",
+
+      content:
+        message
 
     });
 
+
     NEXUS.history.push({
 
-      role:"assistant",
-      content:data.reply
+      role:
+        "assistant",
+
+      content:
+        data.reply
 
     });
 
 
     NEXUS.history =
-      NEXUS.history.slice(-10);
+      NEXUS.history
+        .slice(-10);
 
 
     addLog(
@@ -2953,13 +4196,15 @@ async function sendAI(){
     );
 
 
-    removeLastNexusMessage();
+    removeChatMessage(
+      loadingId
+    );
+
 
     addChatMessage(
       "nexus",
-      "NEXUS: AI core connection failed.\n\n" +
-      error.message +
-      "\n\nCheck that the NEXUS server is running and OPENROUTER_API_KEY is configured."
+      "AI core connection failed.\n\n" +
+      error.message
     );
 
 
@@ -2968,10 +4213,14 @@ async function sendAI(){
       error.message
     );
 
+
   }finally{
 
-    button.disabled = false;
-    button.textContent = "EXECUTE";
+    button.disabled =
+      false;
+
+    button.textContent =
+      "EXECUTE";
 
     input.focus();
 
@@ -2981,56 +4230,93 @@ async function sendAI(){
 
 
 /* =====================================================
-   CHAT UI
+   CHAT MESSAGE
 ===================================================== */
 
-function addChatMessage(type,text){
+function addChatMessage(
+  type,
+  text
+){
 
   const box =
     document.getElementById(
       "chatBox"
     );
 
-  if(!box) return;
+
+  if(!box){
+
+    return null;
+
+  }
+
 
   const div =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
+
+
+  const id =
+    "msg-" +
+    Date.now() +
+    "-" +
+    Math.random()
+      .toString(36)
+      .slice(2);
+
+
+  div.id =
+    id;
+
 
   div.className =
-    "message " + type;
+    "message " +
+    type;
+
 
   div.textContent =
     type === "nexus"
-      ? "NEXUS: " + text
-      : "YOU: " + text;
 
-  box.appendChild(div);
+      ? "NEXUS: " +
+        text
+
+      : "YOU: " +
+        text;
+
+
+  box.appendChild(
+    div
+  );
+
 
   box.scrollTop =
     box.scrollHeight;
 
+
+  return id;
+
 }
 
 
-function removeLastNexusMessage(){
+/* =====================================================
+   REMOVE CHAT MESSAGE
+===================================================== */
 
-  const box =
+function removeChatMessage(id){
+
+  if(!id) return;
+
+
+  const element =
     document.getElementById(
-      "chatBox"
+      id
     );
 
-  if(!box) return;
 
-  const messages =
-    box.querySelectorAll(
-      ".message.nexus"
-    );
+  if(element){
 
-  if(messages.length){
-
-    messages[
-      messages.length - 1
-    ].remove();
+    element.remove();
 
   }
 
@@ -3041,12 +4327,26 @@ function removeLastNexusMessage(){
    AI CONNECTION CHECK
 ===================================================== */
 
-async function checkAIConnection(showMessage){
+async function checkAIConnection(
+  showMessage
+){
 
   const status =
     document.getElementById(
       "aiStatusText"
     );
+
+
+  if(status){
+
+    status.textContent =
+      "CHECKING...";
+
+    status.style.color =
+      "#ffcc66";
+
+  }
+
 
   try{
 
@@ -3060,22 +4360,37 @@ async function checkAIConnection(showMessage){
       );
 
 
-    const data =
-      await response.json();
+    let data;
 
 
-    if(!response.ok){
+    try{
+
+      data =
+        await response.json();
+
+    }catch{
 
       throw new Error(
-        "Server unavailable."
+        "Invalid server response."
       );
 
     }
 
 
-    if(status){
+    if(!response.ok){
 
-      if(data.aiConfigured){
+      throw new Error(
+        "NEXUS server returned an error."
+      );
+
+    }
+
+
+    if(
+      data.aiConfigured
+    ){
+
+      if(status){
 
         status.textContent =
           "CONNECTED";
@@ -3083,7 +4398,22 @@ async function checkAIConnection(showMessage){
         status.style.color =
           "#00ff88";
 
-      }else{
+      }
+
+
+      if(showMessage){
+
+        addChatMessage(
+          "nexus",
+          "AI core connection verified. NEXUS is online and ready."
+        );
+
+      }
+
+
+    }else{
+
+      if(status){
 
         status.textContent =
           "SERVER ONLINE / API KEY MISSING";
@@ -3093,24 +4423,29 @@ async function checkAIConnection(showMessage){
 
       }
 
-    }
 
+      if(showMessage){
 
-    if(showMessage){
+        addChatMessage(
+          "nexus",
+          "The NEXUS server is online, but no OpenRouter API key is configured."
+        );
 
-      addChatMessage(
-        "nexus",
-        data.aiConfigured
-          ? "AI core connection verified. Online and ready."
-          : "NEXUS server is online, but the OpenRouter API key is missing."
-      );
+      }
 
     }
 
 
     return data;
 
+
   }catch(error){
+
+    console.error(
+      "NEXUS HEALTH ERROR:",
+      error
+    );
+
 
     if(status){
 
@@ -3142,10 +4477,12 @@ async function checkAIConnection(showMessage){
 
 
 /* =====================================================
-   VOICE INPUT
+   VOICE
 ===================================================== */
 
-let recognition = null;
+let recognition =
+  null;
+
 
 function startVoiceInput(){
 
@@ -3153,15 +4490,18 @@ function startVoiceInput(){
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
 
+
   const button =
     document.getElementById(
       "voiceButton"
     );
 
+
   const status =
     document.getElementById(
       "voiceStatus"
     );
+
 
   if(!SpeechRecognition){
 
@@ -3177,14 +4517,8 @@ function startVoiceInput(){
 
     recognition.stop();
 
-    recognition = null;
-
-    button.classList.remove(
-      "listening"
-    );
-
-    status.textContent =
-      "Voice system ready.";
+    recognition =
+      null;
 
     return;
 
@@ -3194,41 +4528,53 @@ function startVoiceInput(){
   recognition =
     new SpeechRecognition();
 
+
   recognition.lang =
     "en-US";
 
+
   recognition.interimResults =
     false;
+
 
   recognition.continuous =
     false;
 
 
-  recognition.onstart = () => {
+  recognition.onstart =
+    () => {
 
-    button.classList.add(
-      "listening"
-    );
+      button.classList.add(
+        "listening"
+      );
 
-    button.textContent =
-      "🛑 LISTENING";
+      button.textContent =
+        "🛑 LISTENING";
 
-    status.textContent =
-      "Listening...";
+      status.textContent =
+        "Listening...";
 
-  };
+    };
 
 
   recognition.onresult =
     event => {
 
       const transcript =
-        event.results[0][0].transcript;
+        event
+          .results[0][0]
+          .transcript;
 
-      document.getElementById(
-        "aiInput"
-      ).value =
+
+      const input =
+        document.getElementById(
+          "aiInput"
+        );
+
+
+      input.value =
         transcript;
+
 
       status.textContent =
         "Voice captured.";
@@ -3246,21 +4592,40 @@ function startVoiceInput(){
     };
 
 
-  recognition.onend = () => {
+  recognition.onend =
+    () => {
 
-    button.classList.remove(
-      "listening"
+      button.classList.remove(
+        "listening"
+      );
+
+      button.textContent =
+        "🎙️ VOICE";
+
+      recognition =
+        null;
+
+    };
+
+
+  try{
+
+    recognition.start();
+
+  }catch(error){
+
+    console.error(
+      "Voice start error:",
+      error
     );
 
-    button.textContent =
-      "🎙️ VOICE";
+    status.textContent =
+      "Unable to start voice input.";
 
-    recognition = null;
+    recognition =
+      null;
 
-  };
-
-
-  recognition.start();
+  }
 
 }
 
@@ -3274,16 +4639,24 @@ function changeOperator(){
   const current =
     NEXUS.operator || "";
 
+
   const name =
     prompt(
       "Enter your new operator name:",
       current
     );
 
-  if(name === null) return;
+
+  if(name === null){
+
+    return;
+
+  }
+
 
   const cleaned =
     name.trim();
+
 
   if(cleaned.length < 2){
 
@@ -3295,15 +4668,19 @@ function changeOperator(){
 
   }
 
+
   NEXUS.operator =
     cleaned;
+
 
   localStorage.setItem(
     "nexus_operator",
     cleaned
   );
 
+
   updateOperatorUI();
+
 
   addLog(
     "Operator identity updated."
@@ -3319,7 +4696,13 @@ function resetNexus(){
       "WARNING: This will delete NEXUS local data. Continue?"
     );
 
-  if(!confirmed) return;
+
+  if(!confirmed){
+
+    return;
+
+  }
+
 
   localStorage.removeItem(
     "nexus_operator"
@@ -3341,19 +4724,26 @@ function resetNexus(){
     "nexus_logs"
   );
 
+
   location.reload();
 
 }
 
 
 /* =====================================================
-   UTILITY
+   UTILITIES
 ===================================================== */
 
-function setText(id,value){
+function setText(
+  id,
+  value
+){
 
   const element =
-    document.getElementById(id);
+    document.getElementById(
+      id
+    );
+
 
   if(element){
 
@@ -3365,19 +4755,36 @@ function setText(id,value){
 }
 
 
-function escapeHTML(value){
+function escapeHTML(
+  value
+){
 
   return String(value)
 
-    .replaceAll("&","&amp;")
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
 
-    .replaceAll("<","&lt;")
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
 
-    .replaceAll(">","&gt;")
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
 
-    .replaceAll('"',"&quot;")
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
 
-    .replaceAll("'","&#039;");
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
 
 }
 
@@ -3406,22 +4813,8 @@ function renderAll(){
 
 }
 
-
-/* =====================================================
-   NEXUS BOOT LOG
-===================================================== */
-
-if(!NEXUS.logs.length){
-
-  NEXUS.logs.push(
-    `[${new Date().toLocaleString()}] NEXUS boot sequence ready.`
-  );
-
-  saveData();
-
-}
-
 </script>
 
 </body>
+
 </html>
